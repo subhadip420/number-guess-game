@@ -1,4 +1,4 @@
-package com.example.number_guess_game;
+package com.sptechstudios.number_guess_game;
 
 import io.flutter.embedding.android.FlutterActivity;
 
