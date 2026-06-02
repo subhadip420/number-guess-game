@@ -6,27 +6,27 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
 
 void main() {
-  runApp(const SplashStarter());
+  runApp(const MyApp());
 }
 
-class SplashStarter extends StatefulWidget {
-  const SplashStarter({super.key});
+// class SplashStarter extends StatefulWidget {
+//   const SplashStarter({super.key});
+//
+//   @override
+//   State<SplashStarter> createState() => _SplashStarterState();
+// }
 
-  @override
-  State<SplashStarter> createState() => _SplashStarterState();
-}
-
-class _SplashStarterState extends State<SplashStarter> {
-  bool isDark = true;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SplashScreen(isDark: isDark),
-    );
-  }
-}
+// class _SplashStarterState extends State<SplashStarter> {
+//   bool isDark = true;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       home: SplashScreen(isDark: isDark),
+//     );
+//   }
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
