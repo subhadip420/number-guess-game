@@ -131,6 +131,9 @@ class _GuessGameState extends State<GuessGame>
   bool _isTopBannerReady = false;
   bool _isBottomBannerReady = false;
 
+  NativeAd? _nativeAd;
+  bool _isNativeAdLoaded = false;
+
   @override
   void initState() {
     super.initState();
@@ -142,6 +145,7 @@ class _GuessGameState extends State<GuessGame>
     _loadSoundSetting();
 
     _loadBannerAds();
+    _loadNativeAd();
 
     /////
     _shakeController = AnimationController(
@@ -164,6 +168,9 @@ class _GuessGameState extends State<GuessGame>
     super.dispose();
     ///
     _shakeController.dispose();
+    _topBannerAd?.dispose();
+    _bottomBannerAd?.dispose();
+    _nativeAd?.dispose();
     ///
   }
 
@@ -171,7 +178,7 @@ class _GuessGameState extends State<GuessGame>
 
     // Top Banner
     _topBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+      adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
@@ -185,7 +192,7 @@ class _GuessGameState extends State<GuessGame>
 
     // Bottom Banner
     _bottomBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+      adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
@@ -196,6 +203,32 @@ class _GuessGameState extends State<GuessGame>
         },
       ),
     )..load();
+  }
+
+  void _loadNativeAd() {
+    _nativeAd = NativeAd(
+      adUnitId: 'ca-app-pub-3940256099942544/2247696110', // Test Native Ad
+
+      listener: NativeAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isNativeAdLoaded = true;
+          });
+        },
+
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+        },
+      ),
+
+      request: const AdRequest(),
+
+      nativeTemplateStyle: NativeTemplateStyle(
+        templateType: TemplateType.medium,
+      ),
+    );
+
+    _nativeAd!.load();
   }
 
   Future<void> _loadSoundSetting() async {
@@ -844,7 +877,25 @@ class _GuessGameState extends State<GuessGame>
                       ),
                     ),
 
+                    const SizedBox(height: 16),
+
+                    // if (_isNativeAdLoaded)
+                    //   SizedBox(
+                    //     height: 350,
+                    //     child: AdWidget(ad: _nativeAd!),
+                    //   ),
+
+                    if (_isNativeAdLoaded)
+                      Container(
+                        height: 350,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.red),
+                        ),
+                        child: AdWidget(ad: _nativeAd!),
+                      ),
+
                     const SizedBox(height: 20),
+
 
                     if (scoreHistory.isNotEmpty)
                       Center(
@@ -861,6 +912,8 @@ class _GuessGameState extends State<GuessGame>
                           ),
                         ),
                       ),
+
+                    const SizedBox(height: 20),
 
                   ], // ✅ Column children closed
                 ),
