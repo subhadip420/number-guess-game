@@ -125,8 +125,11 @@ class _GuessGameState extends State<GuessGame>
   bool _soundEnabled = true; // ✅ Added
   bool _clickAnim = false;
 
-  BannerAd? _bannerAd;
-  bool _isBannerReady = false;
+  BannerAd? _topBannerAd;
+  BannerAd? _bottomBannerAd;
+
+  bool _isTopBannerReady = false;
+  bool _isBottomBannerReady = false;
 
   @override
   void initState() {
@@ -137,7 +140,8 @@ class _GuessGameState extends State<GuessGame>
 
     _loadSavedData();
     _loadSoundSetting();
-    _loadBannerAd();
+
+    _loadBannerAds();
 
     /////
     _shakeController = AnimationController(
@@ -163,25 +167,35 @@ class _GuessGameState extends State<GuessGame>
     ///
   }
 
-  void _loadBannerAd() {
-    _bannerAd = BannerAd(
+  void _loadBannerAds() {
+
+    // Top Banner
+    _topBannerAd = BannerAd(
       adUnitId: 'ca-app-pub-3940256099942544/6300978111',
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
         onAdLoaded: (ad) {
           setState(() {
-            _isBannerReady = true;
+            _isTopBannerReady = true;
           });
         },
-        onAdFailedToLoad: (ad, error) {
-          ad.dispose();
-          print('Banner failed: $error');
+      ),
+    )..load();
+
+    // Bottom Banner
+    _bottomBannerAd = BannerAd(
+      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isBottomBannerReady = true;
+          });
         },
       ),
-    );
-
-    _bannerAd!.load();
+    )..load();
   }
 
   Future<void> _loadSoundSetting() async {
@@ -457,6 +471,13 @@ class _GuessGameState extends State<GuessGame>
 
       extendBodyBehindAppBar: true,
 
+      bottomNavigationBar: _isBottomBannerReady
+          ? SizedBox(
+        height: _bottomBannerAd!.size.height.toDouble(),
+        child: AdWidget(ad: _bottomBannerAd!),
+      )
+          : null,
+
       body: Container(
         decoration: BoxDecoration(
           gradient: isDark
@@ -484,13 +505,11 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 10),
 
-                    if (_isBannerReady)
-                      Center(
-                        child: SizedBox(
-                          width: _bannerAd!.size.width.toDouble(),
-                          height: _bannerAd!.size.height.toDouble(),
-                          child: AdWidget(ad: _bannerAd!),
-                        ),
+                    if (_isTopBannerReady)
+                      SizedBox(
+                        width: _topBannerAd!.size.width.toDouble(),
+                        height: _topBannerAd!.size.height.toDouble(),
+                        child: AdWidget(ad: _topBannerAd!),
                       ),
 
                     const SizedBox(height: 30),
