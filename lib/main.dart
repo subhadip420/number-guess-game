@@ -7,7 +7,13 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
 import 'glass_settings_menu.dart';
-void main() {
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await MobileAds.instance.initialize();
+
   runApp(const MyApp());
 }
 
@@ -38,7 +44,10 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
+
   bool isDark = true;
+
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
@@ -55,6 +64,9 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _loadTheme();
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -113,7 +125,8 @@ class _GuessGameState extends State<GuessGame>
   bool _soundEnabled = true; // ✅ Added
   bool _clickAnim = false;
 
-
+  BannerAd? _bannerAd;
+  bool _isBannerReady = false;
 
   @override
   void initState() {
@@ -124,6 +137,7 @@ class _GuessGameState extends State<GuessGame>
 
     _loadSavedData();
     _loadSoundSetting();
+    _loadBannerAd();
 
     /////
     _shakeController = AnimationController(
@@ -137,6 +151,37 @@ class _GuessGameState extends State<GuessGame>
     );
     ////
 
+  }
+
+  @override
+  void dispose() {
+    _confettiController.dispose();
+    _player.dispose();
+    super.dispose();
+    ///
+    _shakeController.dispose();
+    ///
+  }
+
+  void _loadBannerAd() {
+    _bannerAd = BannerAd(
+      adUnitId: 'ca-app-pub-3940256099942544/6300978111',
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _isBannerReady = true;
+          });
+        },
+        onAdFailedToLoad: (ad, error) {
+          ad.dispose();
+          print('Banner failed: $error');
+        },
+      ),
+    );
+
+    _bannerAd!.load();
   }
 
   Future<void> _loadSoundSetting() async {
@@ -258,15 +303,7 @@ class _GuessGameState extends State<GuessGame>
     }
   }
 
-  @override
-  void dispose() {
-    _confettiController.dispose();
-    _player.dispose();
-    super.dispose();
-    ///
-    _shakeController.dispose();
-    ///
-  }
+
 
   void _checkGuess() async {
 
@@ -399,7 +436,7 @@ class _GuessGameState extends State<GuessGame>
           ),
         ),
 
-        toolbarHeight: 65,
+        //toolbarHeight: 65,
 
         title: const Text(
           "Number Guess Challenge",
@@ -439,10 +476,24 @@ class _GuessGameState extends State<GuessGame>
             alignment: Alignment.topCenter,
             children: [
               SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 90, 20, 20),
+                padding: const EdgeInsets.fromLTRB(20, 0, 20, 40),
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+
+                    const SizedBox(height: 10),
+
+                    if (_isBannerReady)
+                      Center(
+                        child: SizedBox(
+                          width: _bannerAd!.size.width.toDouble(),
+                          height: _bannerAd!.size.height.toDouble(),
+                          child: AdWidget(ad: _bannerAd!),
+                        ),
+                      ),
+
+                    const SizedBox(height: 30),
 
                     /// 🎮 Main Card
                     Container(
