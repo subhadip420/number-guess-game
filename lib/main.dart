@@ -1,10 +1,12 @@
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
-
+import 'glass_settings_menu.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -355,6 +357,69 @@ class _GuessGameState extends State<GuessGame>
     bool isDark = widget.isDark;
 
     return Scaffold(
+
+      appBar: AppBar(
+        centerTitle: true,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        backgroundColor: Colors.transparent,
+        surfaceTintColor: Colors.transparent,
+        foregroundColor:
+        isDark ? Colors.white : Colors.black,
+
+        systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+          statusBarIconBrightness:
+          isDark ? Brightness.light : Brightness.dark,
+          statusBarBrightness:
+          isDark ? Brightness.dark : Brightness.light,
+        ),
+
+        flexibleSpace: ClipRRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 20,
+              sigmaY: 20,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: isDark
+                    ? Colors.white.withOpacity(0.05)
+                    : Colors.white.withOpacity(0.18),
+
+                border: Border(
+                  bottom: BorderSide(
+                    color: isDark
+                        ? Colors.white.withOpacity(0.08)
+                        : Colors.black.withOpacity(0.08),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        toolbarHeight: 65,
+
+        title: const Text(
+          "Number Guess Challenge",
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_rounded),
+            onPressed: _openSettings,
+          ),
+        ],
+      ),
+
+      extendBodyBehindAppBar: true,
+
       body: Container(
         decoration: BoxDecoration(
           gradient: isDark
@@ -374,62 +439,10 @@ class _GuessGameState extends State<GuessGame>
             alignment: Alignment.topCenter,
             children: [
               SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 90, 20, 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                    const SizedBox(height: 10),
-
-                    /// 🔥 Custom Heading
-                    Center(
-                      child: Text(
-                        "Number Guessing Game",
-                        style: TextStyle(
-                          fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          color: isDark ? Colors.white : Colors.black,
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    /// 🔊 Buttons under heading (Right aligned)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            _soundEnabled
-                                ? Icons.volume_up
-                                : Icons.volume_off,
-                            color: isDark
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          onPressed: () async {
-                            setState(() {
-                              _soundEnabled = !_soundEnabled;
-                            });
-                            await _saveSoundSetting();
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(
-                            isDark
-                                ? Icons.light_mode
-                                : Icons.dark_mode,
-                            color: isDark
-                                ? Colors.white
-                                : Colors.black,
-                          ),
-                          onPressed: widget.toggleTheme,
-                        ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 30),
 
                     /// 🎮 Main Card
                     Container(
@@ -796,4 +809,45 @@ class _GuessGameState extends State<GuessGame>
       ),
     );
   }
-}
+
+
+  Future<void> _openSettings() async {
+    await showGlassSettingsMenu(
+      context: context,
+      isDark: widget.isDark,
+
+      items: [
+        SettingsMenuItem(
+          title: "Sound",
+          value: _soundEnabled,
+
+          iconBuilder: (value) =>
+          value ? Icons.volume_up : Icons.volume_off,
+
+          onChanged: (value) async {
+            setState(() {
+              _soundEnabled = value;
+            });
+
+            await _saveSoundSetting();
+          },
+        ),
+
+        SettingsMenuItem(
+          title: "Dark Mode",
+          value: widget.isDark,
+
+          affectsTheme: true,
+
+          iconBuilder: (value) =>
+          value ? Icons.dark_mode : Icons.light_mode,
+
+          onChanged: (value) {
+            widget.toggleTheme();
+          },
+        ),
+      ],
+    );
+  }
+
+}///End GuessGameState Class
