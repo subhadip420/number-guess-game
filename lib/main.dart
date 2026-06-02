@@ -501,7 +501,7 @@ class _GuessGameState extends State<GuessGame>
                                 hintText: "00",
                                 hintStyle: TextStyle(
                                   color: isDark
-                                      ? const Color(0xFF737373)
+                                      ? const Color(0xFFFFFFFF)
                                       : const Color(0xFFBBBBBB),
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -591,8 +591,6 @@ class _GuessGameState extends State<GuessGame>
                           ),
 
                           // guess button end
-
-
 
                           const SizedBox(height: 15),
 
