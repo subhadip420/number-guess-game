@@ -539,10 +539,12 @@ class _GuessGameState extends State<GuessGame>
                     const SizedBox(height: 10),
 
                     if (_isTopBannerReady)
-                      SizedBox(
-                        width: _topBannerAd!.size.width.toDouble(),
-                        height: _topBannerAd!.size.height.toDouble(),
-                        child: AdWidget(ad: _topBannerAd!),
+                      Center(
+                        child: SizedBox(
+                          width: _topBannerAd!.size.width.toDouble(),
+                          height: _topBannerAd!.size.height.toDouble(),
+                          child: AdWidget(ad: _topBannerAd!),
+                        ),
                       ),
 
                     const SizedBox(height: 30),
