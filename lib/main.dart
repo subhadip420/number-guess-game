@@ -630,19 +630,49 @@ class _GuessGameState extends State<GuessGame>
 
         //toolbarHeight: 65,
 
-        title: const Text(
+        title: Text(
           "Number Guess Challenge",
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
+            color: isDark ? Colors.white: const Color(0xE7073F52),
           ),
         ),
 
         actions: [
-          IconButton(
-            icon: const Icon(Icons.settings_rounded),
-            onPressed: _openSettings,
+          Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Tooltip(
+              message: "Settings",
+              child: GestureDetector(
+                onTap: _openSettings,
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: isDark
+                        ? const Color(0xFF032B48)
+                        : const Color(0xFFF3E5F5),
+
+                    borderRadius: BorderRadius.circular(14),
+
+                    border: Border.all(
+                      color: isDark
+                          ? const Color(0xFF06E0F1)
+                          : const Color(0xE70D698A),
+                      width: 1.5,
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.settings_rounded,
+                    size: 22,
+                    color: isDark
+                        ? const Color(0xFF06E0F1)
+                        : const Color(0xE70D698A),
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -723,9 +753,10 @@ class _GuessGameState extends State<GuessGame>
                       child: Column(
                         children: [
 
-                          const Text(
+                          Text(
                             "Guess the Number",
                             style: TextStyle(
+                              color: isDark ? Colors.white: Colors.black,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -733,9 +764,12 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 5),
 
-                          const Text(
+                          Text(
                             "Enter a number (1-100)",
-                            style: TextStyle(fontSize: 15),
+                            style: TextStyle(
+                                fontSize: 15,
+                              color: isDark ? Colors.white: Colors.black,
+                            ),
                           ),
 
                           const SizedBox(height: 20),
