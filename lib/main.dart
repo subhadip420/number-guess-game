@@ -543,7 +543,7 @@ class _GuessGameState extends State<GuessGame>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
 
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 20),
 
                     if (_isTopBannerReady)
                       Center(
@@ -558,7 +558,7 @@ class _GuessGameState extends State<GuessGame>
 
                     /// 🎮 Main Card
                     Container(
-                      padding: const EdgeInsets.all(25),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 25),
                       decoration: BoxDecoration(
                         color: isDark
                             ? const Color(0xFF16213E).withOpacity(0.9)
@@ -593,7 +593,7 @@ class _GuessGameState extends State<GuessGame>
                             ),
                           ),
 
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 5),
 
                           const Text(
                             "Enter a number (1-100)",
@@ -717,7 +717,7 @@ class _GuessGameState extends State<GuessGame>
 
                           // guess button end
 
-                          const SizedBox(height: 15),
+                          const SizedBox(height: 20),
 
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 400),
