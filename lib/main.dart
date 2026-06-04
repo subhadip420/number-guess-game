@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
 import 'glass_settings_menu.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -135,9 +136,10 @@ class _GuessGameState extends State<GuessGame>
   bool _isNativeAdLoaded = false;
 
   InterstitialAd? _interstitialAd;
+  RewardedAd? _rewardedAd;
 
   int _completedRounds = 0;
-
+  int _hintCount = 0;
   @override
   void initState() {
     super.initState();
@@ -151,6 +153,7 @@ class _GuessGameState extends State<GuessGame>
     _loadBannerAds();
     _loadNativeAd();
     _loadInterstitialAd();
+    _loadRewardedAd();
 
     /////
     _shakeController = AnimationController(
@@ -271,6 +274,72 @@ class _GuessGameState extends State<GuessGame>
     _interstitialAd!.show();
 
     _interstitialAd = null;
+  }
+
+  void _loadRewardedAd() {
+    RewardedAd.load(
+      adUnitId:
+      'ca-app-pub-3940256099942544/5224354917',
+      request: const AdRequest(),
+      rewardedAdLoadCallback:
+      RewardedAdLoadCallback(
+        onAdLoaded: (ad) {
+          _rewardedAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          _rewardedAd = null;
+        },
+      ),
+    );
+  }
+
+  void _showRewardedAd() {
+    if (_rewardedAd == null) return;
+
+    _rewardedAd!.show(
+      onUserEarnedReward: (ad, reward) {
+
+        _giveHint();
+
+      },
+    );
+
+    _rewardedAd = null;
+
+    _loadRewardedAd();
+  }
+
+  void _giveHint() {
+
+    _hintCount++;
+
+    String hint = "";
+
+    switch (_hintCount) {
+
+      case 1:
+        hint = _targetNumber > 50
+            ? "💡 Number is Greater than 50"
+            : "💡 Number is Less than or Equal to 50";
+        break;
+
+      case 2:
+        int start = (_targetNumber ~/ 10) * 10;
+        int end = start + 10;
+
+        hint = "💡 Number is between $start and $end";
+        break;
+
+      case 3:
+        hint = _targetNumber % 2 == 0
+            ? "💡 Number is Even"
+            : "💡 Number is Odd";
+        break;
+    }
+
+    setState(() {
+      _message = hint;
+    });
   }
 
   Future<void> _loadSoundSetting() async {
@@ -506,6 +575,7 @@ class _GuessGameState extends State<GuessGame>
       _message = "New Round! Guess again.";
       _controller.clear();
       _roundCompleted = false;
+      _hintCount = 0;
     });
   }
 
@@ -846,9 +916,19 @@ class _GuessGameState extends State<GuessGame>
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () {
-                            // TODO: Rewarded Ad + Hint
-                          },
+                        onTap: () {
+
+                        if (_hintCount >= 3) {
+
+                        Fluttertoast.showToast(
+                        msg: "You can get hints up to 3 times per round.",
+                        );
+
+                        return;
+                        }
+
+                        _showRewardedAd();
+                        },
                           child: Container(
                             //width: 80,
                             padding: const EdgeInsets.symmetric(
