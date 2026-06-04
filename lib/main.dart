@@ -134,6 +134,10 @@ class _GuessGameState extends State<GuessGame>
   NativeAd? _nativeAd;
   bool _isNativeAdLoaded = false;
 
+  InterstitialAd? _interstitialAd;
+
+  int _completedRounds = 0;
+
   @override
   void initState() {
     super.initState();
@@ -146,6 +150,7 @@ class _GuessGameState extends State<GuessGame>
 
     _loadBannerAds();
     _loadNativeAd();
+    _loadInterstitialAd();
 
     /////
     _shakeController = AnimationController(
@@ -229,6 +234,43 @@ class _GuessGameState extends State<GuessGame>
     );
 
     _nativeAd!.load();
+  }
+
+  void _loadInterstitialAd() {
+    InterstitialAd.load(
+      adUnitId: 'ca-app-pub-3940256099942544/1033173712',
+      request: const AdRequest(),
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (ad) {
+          _interstitialAd = ad;
+        },
+        onAdFailedToLoad: (error) {
+          _interstitialAd = null;
+        },
+      ),
+    );
+  }
+
+  void _showInterstitialAd() {
+    if (_interstitialAd == null) return;
+
+    _interstitialAd!.fullScreenContentCallback =
+        FullScreenContentCallback(
+          onAdDismissedFullScreenContent: (ad) {
+            ad.dispose();
+
+            _loadInterstitialAd();
+          },
+          onAdFailedToShowFullScreenContent: (ad, error) {
+            ad.dispose();
+
+            _loadInterstitialAd();
+          },
+        );
+
+    _interstitialAd!.show();
+
+    _interstitialAd = null;
   }
 
   Future<void> _loadSoundSetting() async {
@@ -398,6 +440,9 @@ class _GuessGameState extends State<GuessGame>
       }
     }
     else {
+
+      _completedRounds++;
+
       setState(() {
         _message = "Congrats! You guessed it in $_attempts attempt(s). 🎉";
         _roundCompleted = true;
@@ -424,12 +469,35 @@ class _GuessGameState extends State<GuessGame>
     }
   }
 
+  // Future<void> _nextRound() async {
+  //
+  //   if (_soundEnabled) {
+  //     await AudioPlayer().play(
+  //       AssetSource('restart.mp3'),
+  //     );
+  //   }
+  //
+  //   setState(() {
+  //     _targetNumber = _random.nextInt(100) + 1;
+  //     _attempts = 0;
+  //     _message = "New Round! Guess again.";
+  //     _controller.clear();
+  //     _roundCompleted = false;
+  //   });
+  // }
+
   Future<void> _nextRound() async {
 
     if (_soundEnabled) {
       await AudioPlayer().play(
         AssetSource('restart.mp3'),
       );
+    }
+
+    // Every 3 completed games
+    if (_completedRounds > 0 &&
+        _completedRounds % 3 == 0) {
+      _showInterstitialAd();
     }
 
     setState(() {
