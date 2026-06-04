@@ -1134,20 +1134,44 @@ class _GuessGameState extends State<GuessGame>
                             ? const Color(0xFF0F172A).withOpacity(0.4)
                             : const Color(0xFFEAFDFC),
                         borderRadius: BorderRadius.circular(15),
+                        border: Border.all(
+                          color: isDark
+                              ? const Color(0xFF0891B2) // Dark mode border
+                              : const Color(0xFF14B8A6), // Light mode border
+                          width: 1.8,
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
 
-                          const Text(
-                            "Score History (Max 20)",
+                          Text(
+                            "Round History",
                             style: TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white: Colors.black,
                             ),
                           ),
 
-                          const SizedBox(height: 10),
+                          Text(
+                            "Last 20 games",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: Colors.grey,
+                            ),
+                          ),
+
+                          const SizedBox(height: 5),
+
+                          Divider(
+                            color: isDark
+                                ? Colors.white24
+                                : Colors.black12,
+                            thickness: 1,
+                          ),
+
+                          const SizedBox(height: 5),
 
                           scoreHistory.isEmpty
                               ? Padding(
