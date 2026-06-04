@@ -121,6 +121,7 @@ class _GuessGameState extends State<GuessGame>
 
   List<int> scoreHistory = [];
   int? highestScore;
+  bool _showAllHistory = false;
 
   bool _roundCompleted = false;
   bool _soundEnabled = true; // ✅ Added
@@ -1173,6 +1174,56 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 5),
 
+                          // scoreHistory.isEmpty
+                          //     ? Padding(
+                          //   padding: const EdgeInsets.symmetric(vertical: 20),
+                          //   child: Text(
+                          //     "No rounds played yet",
+                          //     style: TextStyle(
+                          //       color: isDark ? Colors.grey : Colors.black54,
+                          //     ),
+                          //   ),
+                          // )
+                          //     : ListView.builder(
+                          //   shrinkWrap: true,
+                          //   physics: const NeverScrollableScrollPhysics(),
+                          //   itemCount: scoreHistory.length,
+                          //   itemBuilder: (context, index) {
+                          //     int score = scoreHistory[index];
+                          //     bool isHighest = score == highestScore;
+                          //
+                          //     return Card(
+                          //       color: isHighest
+                          //           ? (isDark
+                          //           ? const Color(0xFFC4EBF5).withOpacity(0.4)
+                          //           : const Color(0xFF3ABDA6).withOpacity(0.6))
+                          //           : (isDark
+                          //           ? const Color(0xFF1B263B).withOpacity(0.2)
+                          //           : const Color(0xFFD2FCF6).withOpacity(0.6)),
+                          //       child: ListTile(
+                          //         leading: const Icon(Icons.emoji_events,
+                          //             color: Colors.amber),
+                          //         title: Text(
+                          //           "Round ${scoreHistory.length - index}",
+                          //           style: TextStyle(
+                          //             fontWeight: isHighest
+                          //                 ? FontWeight.bold
+                          //                 : FontWeight.normal,
+                          //           ),
+                          //         ),
+                          //         trailing: Text(
+                          //           "$score attempts",
+                          //           style: TextStyle(
+                          //             fontWeight: isHighest
+                          //                 ? FontWeight.bold
+                          //                 : FontWeight.normal,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     );
+                          //   },
+                          // ),
+
                           scoreHistory.isEmpty
                               ? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
@@ -1183,44 +1234,91 @@ class _GuessGameState extends State<GuessGame>
                               ),
                             ),
                           )
-                              : ListView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: scoreHistory.length,
-                            itemBuilder: (context, index) {
-                              int score = scoreHistory[index];
-                              bool isHighest = score == highestScore;
+                              : Column(
+                            children: [
 
-                              return Card(
-                                color: isHighest
-                                    ? (isDark
-                                    ? const Color(0xFFC4EBF5).withOpacity(0.4)
-                                    : const Color(0xFF3ABDA6).withOpacity(0.6))
-                                    : (isDark
-                                    ? const Color(0xFF1B263B).withOpacity(0.2)
-                                    : const Color(0xFFD2FCF6).withOpacity(0.6)),
-                                child: ListTile(
-                                  leading: const Icon(Icons.emoji_events,
-                                      color: Colors.amber),
-                                  title: Text(
-                                    "Round ${scoreHistory.length - index}",
-                                    style: TextStyle(
-                                      fontWeight: isHighest
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
+                              ListView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+
+                                itemCount: _showAllHistory
+                                    ? scoreHistory.length
+                                    : (scoreHistory.length > 5
+                                    ? 5
+                                    : scoreHistory.length),
+
+                                itemBuilder: (context, index) {
+
+                                  int score = scoreHistory[index];
+                                  bool isHighest =
+                                      score == highestScore;
+
+                                  return Card(
+                                    color: isHighest
+                                        ? (isDark
+                                        ? const Color(0xFFC4EBF5)
+                                        .withOpacity(0.4)
+                                        : const Color(0xFF3ABDA6)
+                                        .withOpacity(0.6))
+                                        : (isDark
+                                        ? const Color(0xFF1B263B)
+                                        .withOpacity(0.2)
+                                        : const Color(0xFFD2FCF6)
+                                        .withOpacity(0.6)),
+                                    child: ListTile(
+                                      leading: const Icon(
+                                        Icons.emoji_events,
+                                        color: Colors.amber,
+                                      ),
+                                      title: Text(
+                                        "Round ${scoreHistory.length - index}",
+                                        style: TextStyle(
+                                          fontWeight: isHighest
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
+                                      trailing: Text(
+                                        "$score attempts",
+                                        style: TextStyle(
+                                          fontWeight: isHighest
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                        ),
+                                      ),
                                     ),
+                                  );
+                                },
+                              ),
+
+                              if (scoreHistory.length > 5)
+                                TextButton.icon(
+                                  onPressed: () {
+                                    setState(() {
+                                      _showAllHistory =
+                                      !_showAllHistory;
+                                    });
+                                  },
+
+                                  icon: Icon(
+                                    _showAllHistory
+                                        ? Icons.expand_less
+                                        : Icons.expand_more,
                                   ),
-                                  trailing: Text(
-                                    "$score attempts",
+
+                                  label: Text(
+                                    _showAllHistory
+                                        ? "View Less"
+                                        : "View More",
                                     style: TextStyle(
-                                      fontWeight: isHighest
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
+                                      color: isDark
+                                          ? const Color(0xFF4FC3F7)
+                                          : const Color(0xFF1976D2),
+                                      fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                 ),
-                              );
-                            },
+                            ],
                           ),
                         ],
                       ),
