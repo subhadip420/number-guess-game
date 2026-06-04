@@ -12,6 +12,7 @@ dependencies:
     sdk: flutter
 
   google_mobile_ads: ^6.0.0
+  fluttertoast: ^8.2.12
 
   cupertino_icons: ^1.0.8
   shared_preferences: ^2.2.2
