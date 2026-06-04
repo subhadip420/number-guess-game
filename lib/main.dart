@@ -795,26 +795,32 @@ class _GuessGameState extends State<GuessGame>
                               borderRadius: BorderRadius.circular(16),
 
                               border: Border.all(
-                                color: Colors.amber,
+                                color: isDark
+                                    ? Colors.amber :
+                                Colors.deepOrange,
                                 width: 1.5,
                               ),
                             ),
-                            child: const Column(
+                            child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
 
                                 Icon(
                                   Icons.lightbulb_outline,
-                                  color: Colors.amber,
+                                  color: isDark
+                                  ? Colors.amber :
+                                  Colors.deepOrange,
                                   size: 22,
                                 ),
 
-                                SizedBox(height: 4),
+                                const SizedBox(height: 4),
 
                                 Text(
                                   "Hint",
                                   style: TextStyle(
-                                    color: Colors.amber,
+                                    color: isDark
+                                        ? Colors.amber :
+                                    Colors.deepOrange,
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
