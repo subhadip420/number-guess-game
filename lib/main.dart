@@ -424,7 +424,14 @@ class _GuessGameState extends State<GuessGame>
     }
   }
 
-  void _nextRound() {
+  Future<void> _nextRound() async {
+
+    if (_soundEnabled) {
+      await AudioPlayer().play(
+        AssetSource('restart.mp3'),
+      );
+    }
+
     setState(() {
       _targetNumber = _random.nextInt(100) + 1;
       _attempts = 0;
@@ -734,33 +741,161 @@ class _GuessGameState extends State<GuessGame>
                     const SizedBox(height: 25),
 
                     /// Attempts + Restart
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       "Attempts: $_attempts",
+                    //       style: TextStyle(
+                    //         fontSize: 17,
+                    //         color: isDark
+                    //             ? Colors.white
+                    //             : Colors.black,
+                    //       ),
+                    //     ),
+                    //     TextButton.icon(
+                    //       onPressed: () async {
+                    //         if (_soundEnabled) {
+                    //           await AudioPlayer().play(
+                    //             AssetSource('restart.mp3'),
+                    //           );
+                    //         }
+                    //         _nextRound();
+                    //       },
+                    //       icon: const Icon(Icons.refresh, size: 22),
+                    //       label: const Text(
+                    //         "Restart",
+                    //         style: TextStyle(
+                    //           fontSize: 17,
+                    //           fontWeight: FontWeight.w600,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+
+
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Attempts: $_attempts",
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: isDark
-                                ? Colors.white
-                                : Colors.black,
+                        GestureDetector(
+                          onTap: () {
+                            // TODO: Rewarded Ad + Hint
+                          },
+                          child: Container(
+                            //width: 80,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 23,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF032B48)
+                                  : const Color(0xFFFFF8E1),
+
+                              borderRadius: BorderRadius.circular(16),
+
+                              border: Border.all(
+                                color: Colors.amber,
+                                width: 1.5,
+                              ),
+                            ),
+                            child: const Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+
+                                Icon(
+                                  Icons.lightbulb_outline,
+                                  color: Colors.amber,
+                                  size: 22,
+                                ),
+
+                                SizedBox(height: 4),
+
+                                Text(
+                                  "Hint",
+                                  style: TextStyle(
+                                    color: Colors.amber,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                        TextButton.icon(
-                          onPressed: () async {
-                            if (_soundEnabled) {
-                              await AudioPlayer().play(
-                                AssetSource('restart.mp3'),
-                              );
-                            }
+
+
+
+                        /// ATTEMPTS CENTER
+                        Expanded(
+                          child: Center(
+                            child: Text(
+                              "Attempts: $_attempts",
+                              style: TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                color: isDark
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        /// RESTART BUTTON
+                        GestureDetector(
+                          onTap: () async {
+                            // if (_soundEnabled) {
+                            //   await AudioPlayer().play(
+                            //     AssetSource('restart.mp3'),
+                            //   );
+                            // }
                             _nextRound();
                           },
-                          icon: const Icon(Icons.refresh, size: 22),
-                          label: const Text(
-                            "Restart",
-                            style: TextStyle(
-                              fontSize: 17,
-                              fontWeight: FontWeight.w600,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF032B48)
+                                  : const Color(0xFFE3F2FD),
+
+                              borderRadius: BorderRadius.circular(16),
+
+                              border: Border.all(
+                                color: isDark
+                                    ? const Color(0xFF4FC3F7)
+                                    : const Color(0xFF1976D2),
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+
+                                Icon(
+                                  Icons.refresh_rounded,
+                                  color: isDark
+                                      ? const Color(0xFF4FC3F7)
+                                      : const Color(0xFF1976D2),
+                                  size: 22,
+                                ),
+
+                                const SizedBox(height: 4),
+
+                                Text(
+                                  "Restart",
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? const Color(0xFF4FC3F7)
+                                        : const Color(0xFF1976D2),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
@@ -776,7 +911,7 @@ class _GuessGameState extends State<GuessGame>
                               horizontal: 20, vertical: 12),
                           decoration: BoxDecoration(
                             color: isDark
-                                ? const Color(0xFF032B48)
+                                ? Colors.transparent
                                 : const Color(0xFFFFF3E0),
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
