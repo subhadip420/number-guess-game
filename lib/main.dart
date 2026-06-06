@@ -985,9 +985,7 @@ class _GuessGameState extends State<GuessGame>
                       children: [
                         GestureDetector(
                           onTap: () {
-
                             if (_roundCompleted) {
-
                               Fluttertoast.showToast(
                                 msg: "Round completed. Start a new round.",
                               );
@@ -996,7 +994,6 @@ class _GuessGameState extends State<GuessGame>
                             }
 
                             if (_hintCount >= 3) {
-
                               Fluttertoast.showToast(
                                 msg: "You can get hints up to 3 times per round.",
                               );
@@ -1005,7 +1002,6 @@ class _GuessGameState extends State<GuessGame>
                             }
 
                             if (_rewardedAd == null) {
-
                               Fluttertoast.showToast(
                                 msg: "Hint is loading. Please try again.",
                               );
@@ -1035,10 +1031,22 @@ class _GuessGameState extends State<GuessGame>
 
                                 border: Border.all(
                                   color: isDark
-                                      ? Colors.amber :
-                                  Color(0xE70D698A),
+                                      ? Colors.amber
+                                      : const Color(0xE70D698A),
                                   width: 1.5,
                                 ),
+
+                                boxShadow: _roundCompleted || _hintCount >= 3
+                                    ? []
+                                    : [
+                                  BoxShadow(
+                                    color: isDark
+                                        ? Colors.amber.withOpacity(0.45)
+                                        : const Color(0xE70D698A).withOpacity(0.35),
+                                    blurRadius: 14,
+                                    spreadRadius: 1,
+                                  ),
+                                ],
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
@@ -1126,6 +1134,18 @@ class _GuessGameState extends State<GuessGame>
                                       : const Color(0xFF1976D2),
                                   width: 1.5,
                                 ),
+
+                                boxShadow: _attempts == 0
+                                    ? []
+                                    : [
+                                  BoxShadow(
+                                    color: isDark
+                                        ? const Color(0xFF4FC3F7).withOpacity(0.5)
+                                        : const Color(0xFF1976D2).withOpacity(0.35),
+                                    blurRadius: 18,
+                                    spreadRadius: 2,
+                                  ),
+                                ],
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
