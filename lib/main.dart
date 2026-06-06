@@ -1034,57 +1034,64 @@ class _GuessGameState extends State<GuessGame>
                         /// RESTART BUTTON
                         GestureDetector(
                           onTap: () async {
-                            // if (_soundEnabled) {
-                            //   await AudioPlayer().play(
-                            //     AssetSource('restart.mp3'),
-                            //   );
-                            // }
+
+                            if (_attempts == 0) {
+                              Fluttertoast.showToast(
+                                msg: "Make a guess before restarting.",
+                              );
+                              return;
+                            }
+
                             _nextRound();
                           },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF032B48)
-                                  : const Color(0xFFE3F2FD),
+                          child: Opacity(
+                            opacity: _attempts == 0 ? 0.5 : 1.0,
 
-                              borderRadius: BorderRadius.circular(16),
-
-                              border: Border.all(
-                                color: isDark
-                                    ? const Color(0xFF4FC3F7)
-                                    : const Color(0xFF1976D2),
-                                width: 1.5,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
                               ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? const Color(0xFF032B48)
+                                    : const Color(0xFFE3F2FD),
 
-                                Icon(
-                                  Icons.refresh_rounded,
+                                borderRadius: BorderRadius.circular(16),
+
+                                border: Border.all(
                                   color: isDark
                                       ? const Color(0xFF4FC3F7)
                                       : const Color(0xFF1976D2),
-                                  size: 22,
+                                  width: 1.5,
                                 ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
 
-                                const SizedBox(height: 4),
-
-                                Text(
-                                  "Restart",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                  Icon(
+                                    Icons.refresh_rounded,
                                     color: isDark
                                         ? const Color(0xFF4FC3F7)
                                         : const Color(0xFF1976D2),
+                                    size: 22,
                                   ),
-                                ),
-                              ],
+
+                                  const SizedBox(height: 4),
+
+                                  Text(
+                                    "Restart",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: isDark
+                                          ? const Color(0xFF4FC3F7)
+                                          : const Color(0xFF1976D2),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
