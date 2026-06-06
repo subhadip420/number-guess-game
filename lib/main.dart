@@ -904,7 +904,20 @@ class _GuessGameState extends State<GuessGame>
                                         Color(0xFF019FAB),
                                       ],
                                     )),
+
                                     borderRadius: BorderRadius.circular(30),
+
+                                    boxShadow: _roundCompleted
+                                        ? []
+                                        : [
+                                      BoxShadow(
+                                        color: isDark
+                                            ? const Color(0xE70D698A).withOpacity(0.6)
+                                            : const Color(0xFF15C2BD).withOpacity(0.5),
+                                        blurRadius: 22,
+                                        spreadRadius: 3,
+                                      ),
+                                    ],
                                   ),
                                   child: Center(
                                     child: Text(
