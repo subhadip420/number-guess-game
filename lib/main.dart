@@ -951,64 +951,90 @@ class _GuessGameState extends State<GuessGame>
                     Row(
                       children: [
                         GestureDetector(
-                        onTap: () {
+                          onTap: () {
 
-                        if (_hintCount >= 3) {
+                            if (_roundCompleted) {
 
-                        Fluttertoast.showToast(
-                        msg: "You can get hints up to 3 times per round.",
-                        );
+                              Fluttertoast.showToast(
+                                msg: "Round completed. Start a new round.",
+                              );
 
-                        return;
-                        }
+                              return;
+                            }
 
-                        _showRewardedAd();
-                        },
-                          child: Container(
-                            //width: 80,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 23,
-                              vertical: 6,
-                            ),
-                            decoration: BoxDecoration(
-                              color: isDark
-                                  ? const Color(0xFF032B48)
-                                  : const Color(0xFFF7FFFE),
+                            if (_hintCount >= 3) {
 
-                              borderRadius: BorderRadius.circular(16),
+                              Fluttertoast.showToast(
+                                msg: "You can get hints up to 3 times per round.",
+                              );
 
-                              border: Border.all(
-                                color: isDark
-                                    ? Colors.amber :
-                                Color(0xE70D698A),
-                                width: 1.5,
+                              return;
+                            }
+
+                            if (_rewardedAd == null) {
+
+                              Fluttertoast.showToast(
+                                msg: "Hint is loading. Please try again.",
+                              );
+
+                              _loadRewardedAd();
+
+                              return;
+                            }
+
+                            _showRewardedAd();
+                          },
+
+                          child: Opacity(
+                            opacity: _roundCompleted ? 0.5 : 1.0,
+                            child: Container(
+                              //width: 80,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 12,
+                                vertical: 6,
                               ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
+                              decoration: BoxDecoration(
+                                color: isDark
+                                    ? const Color(0xFF032B48)
+                                    : const Color(0xFFF7FFFE),
 
-                                Icon(
-                                  Icons.lightbulb_outline,
+                                borderRadius: BorderRadius.circular(16),
+
+                                border: Border.all(
                                   color: isDark
-                                  ? Colors.amber :
+                                      ? Colors.amber :
                                   Color(0xE70D698A),
-                                  size: 22,
+                                  width: 1.5,
                                 ),
+                              ),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
 
-                                const SizedBox(height: 4),
-
-                                Text(
-                                  "Hint",
-                                  style: TextStyle(
+                                  Icon(
+                                    Icons.lightbulb_outline,
                                     color: isDark
                                         ? Colors.amber :
                                     Color(0xE70D698A),
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
+                                    size: 22,
                                   ),
-                                ),
-                              ],
+
+                                  const SizedBox(height: 4),
+
+                                  Text(
+                                    _hintCount >= 3
+                                        ? "Used"
+                                        : "Hint (${3 - _hintCount})",
+                                    style: TextStyle(
+                                      color: isDark
+                                          ? Colors.amber
+                                          : const Color(0xE70D698A),
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
