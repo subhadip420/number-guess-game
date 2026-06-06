@@ -1031,7 +1031,7 @@ class _GuessGameState extends State<GuessGame>
                           child: Opacity(
                             opacity: _roundCompleted ? 0.5 : 1.0,
                             child: Container(
-                              width: 80,
+                              width: 82,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 6,
@@ -1045,8 +1045,8 @@ class _GuessGameState extends State<GuessGame>
 
                                 border: Border.all(
                                   color: isDark
-                                      ? Colors.amber
-                                      : const Color(0xE70D698A),
+                                      ? Colors.cyanAccent
+                                      : Colors.teal,
                                   width: 1.5,
                                 ),
 
@@ -1055,8 +1055,8 @@ class _GuessGameState extends State<GuessGame>
                                     : [
                                   BoxShadow(
                                     color: isDark
-                                        ? Colors.amber.withOpacity(0.45)
-                                        : const Color(0xE70D698A).withOpacity(0.35),
+                                        ? Colors.cyanAccent.withOpacity(0.45)
+                                        : Colors.teal.withOpacity(0.35),
                                     blurRadius: 14,
                                     spreadRadius: 1,
                                   ),
@@ -1071,8 +1071,8 @@ class _GuessGameState extends State<GuessGame>
                                         ? Icons.check_circle
                                         : Icons.lightbulb_outline,
                                     color: isDark
-                                        ? Colors.amber
-                                        : const Color(0xE70D698A),
+                                        ? Colors.cyanAccent
+                                        : Colors.teal,
                                     size: 22,
                                   ),
 
@@ -1084,8 +1084,8 @@ class _GuessGameState extends State<GuessGame>
                                         : "Hint (${3 - _hintCount})",
                                     style: GoogleFonts.audiowide(
                                       color: isDark
-                                          ? Colors.amber
-                                          : const Color(0xE70D698A),
+                                          ? Colors.cyanAccent
+                                          : Colors.teal,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -1144,8 +1144,8 @@ class _GuessGameState extends State<GuessGame>
 
                                 border: Border.all(
                                   color: isDark
-                                      ? const Color(0xFF4FC3F7)
-                                      : const Color(0xFF1976D2),
+                                      ? Colors.cyanAccent
+                                      : Colors.teal,
                                   width: 1.5,
                                 ),
 
@@ -1154,8 +1154,8 @@ class _GuessGameState extends State<GuessGame>
                                     : [
                                   BoxShadow(
                                     color: isDark
-                                        ? const Color(0xFF4FC3F7).withOpacity(0.5)
-                                        : const Color(0xFF1976D2).withOpacity(0.35),
+                                        ? Colors.cyanAccent.withOpacity(0.5)
+                                        : Colors.teal.withOpacity(0.35),
                                     blurRadius: 18,
                                     spreadRadius: 2,
                                   ),
@@ -1168,8 +1168,8 @@ class _GuessGameState extends State<GuessGame>
                                   Icon(
                                     Icons.refresh_rounded,
                                     color: isDark
-                                        ? const Color(0xFF4FC3F7)
-                                        : const Color(0xFF1976D2),
+                                        ? Colors.cyanAccent
+                                        : Colors.teal,
                                     size: 22,
                                   ),
 
@@ -1181,8 +1181,8 @@ class _GuessGameState extends State<GuessGame>
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: isDark
-                                          ? const Color(0xFF4FC3F7)
-                                          : const Color(0xFF1976D2),
+                                          ? Colors.cyanAccent
+                                          : Colors.teal,
                                     ),
                                   ),
                                 ],
