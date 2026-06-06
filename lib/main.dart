@@ -1196,30 +1196,65 @@ class _GuessGameState extends State<GuessGame>
                     const SizedBox(height: 15),
 
                     if (highestScore != null)
+                      // Center(
+                      //   child: Container(
+                      //     padding: const EdgeInsets.symmetric(
+                      //         horizontal: 20, vertical: 12),
+                      //     decoration: BoxDecoration(
+                      //       color: isDark
+                      //           ? Colors.transparent
+                      //           : const Color(0xFFFFF3E0),
+                      //       borderRadius: BorderRadius.circular(20),
+                      //       // border: Border.all(
+                      //       //   color: isDark
+                      //       //       ? const Color(0xFF088D89)
+                      //       //       : const Color(0xFFFF8F00),
+                      //       //   width: 2,
+                      //       // ),
+                      //     ),
+                      //     child: Text(
+                      //       "🏆 Highest Score: $highestScore attempts",
+                      //       style: GoogleFonts.electrolize(
+                      //         fontSize: 15,
+                      //         fontWeight: FontWeight.bold,
+                      //         color: isDark
+                      //             ? const Color(0xFFFFC107)
+                      //             : const Color(0xFFFF8F00),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
+
                       Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 12),
-                          decoration: BoxDecoration(
-                            color: isDark
-                                ? Colors.transparent
-                                : const Color(0xFFFFF3E0),
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: isDark
-                                  ? const Color(0xFF088D89)
-                                  : const Color(0xFFFF8F00),
-                              width: 2,
-                            ),
+                            horizontal: 20,
+                            vertical: 12,
                           ),
+
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+
+                            boxShadow: [
+                              BoxShadow(
+                                color: (isDark
+                                    ? const Color(0xFFFFC107)
+                                    : const Color(0xFFFF8F00))
+                                    .withOpacity(0.18),
+                                blurRadius: 18,
+                                spreadRadius: 2,
+                              ),
+                            ],
+                          ),
+
                           child: Text(
                             "🏆 Highest Score: $highestScore attempts",
                             style: GoogleFonts.electrolize(
                               fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: isDark
-                                  ? const Color(0xFFFFC107)
-                                  : const Color(0xFFFF8F00),
+                                  ? const Color(0xFFFFD54F)
+                                  : const Color(0xFFE65100),
                             ),
                           ),
                         ),
