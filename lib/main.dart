@@ -1396,17 +1396,70 @@ class _GuessGameState extends State<GuessGame>
                     const SizedBox(height: 20),
 
 
+                    // if (scoreHistory.isNotEmpty)
+                    //   Center(
+                    //     child: TextButton.icon(
+                    //       onPressed: _showClearOptions,
+                    //       icon: const Icon(Icons.delete, color: Colors.red),
+                    //       label: const Text(
+                    //         "Clear History",
+                    //         style: TextStyle(
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.w600,
+                    //           color: Colors.red,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+
                     if (scoreHistory.isNotEmpty)
                       Center(
-                        child: TextButton.icon(
-                          onPressed: _showClearOptions,
-                          icon: const Icon(Icons.delete, color: Colors.red),
-                          label: const Text(
-                            "Clear History",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.red,
+                        child: GestureDetector(
+                          onTap: _showClearOptions,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 18,
+                              vertical: 10,
+                            ),
+                            decoration: BoxDecoration(
+                              color: isDark
+                                  ? const Color(0xFF2D0B0B)
+                                  : const Color(0xFFFFF1F1),
+
+                              borderRadius: BorderRadius.circular(16),
+
+                              border: Border.all(
+                                color: isDark
+                                    ? const Color(0xFFFF6B6B)
+                                    : const Color(0xFFD32F2F),
+                                width: 1.5,
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+
+                                Icon(
+                                  Icons.delete_outline,
+                                  color: isDark
+                                      ? const Color(0xFFFF6B6B)
+                                      : const Color(0xFFD32F2F),
+                                  size: 22,
+                                ),
+
+                                const SizedBox(width: 8),
+
+                                Text(
+                                  "Clear History",
+                                  style: TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w600,
+                                    color: isDark
+                                        ? const Color(0xFFFF6B6B)
+                                        : const Color(0xFFD32F2F),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
