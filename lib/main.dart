@@ -1145,7 +1145,6 @@ class _GuessGameState extends State<GuessGame>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-
                           Text(
                             "Round History",
                             style: TextStyle(
