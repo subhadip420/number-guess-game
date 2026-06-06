@@ -737,7 +737,7 @@ class _GuessGameState extends State<GuessGame>
                         border: Border.all(
                           color: isDark
                               ? const Color(0xFF0E4286).withOpacity(0.9)
-                              : const Color(0xFFBAFDE6),
+                              : const Color(0xFF70C0AE),
                           width: 4,
                         ),
 
