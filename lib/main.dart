@@ -683,22 +683,22 @@ class _GuessGameState extends State<GuessGame>
                 onTap: _openSettings,
                 child: Container(
                   padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: isDark
-                        ? const Color(0xFF032B48)
-                        : const Color(0xFFF3E5F5),
-
-                    borderRadius: BorderRadius.circular(14),
-
-                    border: Border.all(
-                      color: isDark
-                          ? const Color(0xFF06E0F1)
-                          : const Color(0xE70D698A),
-                      width: 1.5,
-                    ),
-                  ),
+                  // decoration: BoxDecoration(
+                  //   color: isDark
+                  //       ? const Color(0xFF032B48)
+                  //       : const Color(0xFFF3E5F5),
+                  //
+                  //   borderRadius: BorderRadius.circular(14),
+                  //
+                  //   border: Border.all(
+                  //     color: isDark
+                  //         ? const Color(0xFF06E0F1)
+                  //         : const Color(0xE70D698A),
+                  //     width: 1.5,
+                  //   ),
+                  // ),
                   child: Icon(
-                    Icons.settings_rounded,
+                    Icons.more_vert_rounded,
                     size: 22,
                     color: isDark
                         ? const Color(0xFF06E0F1)
