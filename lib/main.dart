@@ -1153,7 +1153,6 @@ class _GuessGameState extends State<GuessGame>
                               color: isDark ? Colors.white: Colors.black,
                             ),
                           ),
-
                           Text(
                             "Last 20 games",
                             style: TextStyle(
