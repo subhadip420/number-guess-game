@@ -9,6 +9,7 @@ import 'splash_screen.dart';
 import 'glass_settings_menu.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -667,10 +668,10 @@ class _GuessGameState extends State<GuessGame>
         title: Text(
           "Number Guess Challenge",
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 20,
+          style: GoogleFonts.vt323(
+            fontSize: 25,
             fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white: const Color(0xE7073F52),
+            color: isDark ? Colors.white: const Color(0xE7052C3A),
           ),
         ),
 
@@ -760,7 +761,7 @@ class _GuessGameState extends State<GuessGame>
 
                     /// 🎮 Main Card
                     Container(
-                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 25),
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
                       decoration: BoxDecoration(
                         color: isDark
                             ? const Color(0xFF16213E).withOpacity(0.9)
@@ -789,7 +790,7 @@ class _GuessGameState extends State<GuessGame>
 
                           Text(
                             "Guess the Number",
-                            style: TextStyle(
+                            style: GoogleFonts.orbitron(
                               color: isDark ? Colors.white: Colors.black,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
@@ -800,8 +801,8 @@ class _GuessGameState extends State<GuessGame>
 
                           Text(
                             "Enter a number (1-100)",
-                            style: TextStyle(
-                                fontSize: 15,
+                            style: GoogleFonts.exo2(
+                                fontSize: 13,
                               color: isDark ? Colors.white: Colors.black,
                             ),
                           ),
@@ -824,13 +825,13 @@ class _GuessGameState extends State<GuessGame>
                               controller: _controller,
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
-                              style: const TextStyle(
+                              style: GoogleFonts.electrolize(
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                               ),
                               decoration: InputDecoration(
                                 hintText: "00",
-                                hintStyle: TextStyle(
+                                hintStyle: GoogleFonts.orbitron(
                                   color: isDark
                                       ? const Color(0xFFFFFFFF)
                                       : const Color(0xFFBBBBBB),
@@ -922,7 +923,7 @@ class _GuessGameState extends State<GuessGame>
                                   child: Center(
                                     child: Text(
                                       _roundCompleted ? "COMPLETED" : "GUESS",
-                                      style: const TextStyle(
+                                      style: GoogleFonts.audiowide(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
@@ -944,11 +945,11 @@ class _GuessGameState extends State<GuessGame>
                               _message,
                               key: ValueKey(_message),
                               textAlign: TextAlign.center,
-                              style: TextStyle(
+                              style: GoogleFonts.vt323(
                                 color: isDark
                                     ? const Color(0xFFFD784F)
                                     : const Color(0xFFFF5B02),
-                                fontSize: 16,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -1030,7 +1031,7 @@ class _GuessGameState extends State<GuessGame>
                           child: Opacity(
                             opacity: _roundCompleted ? 0.5 : 1.0,
                             child: Container(
-                              width: 70,
+                              width: 80,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 6,
@@ -1081,7 +1082,7 @@ class _GuessGameState extends State<GuessGame>
                                     _hintCount >= 3
                                         ? "Used"
                                         : "Hint (${3 - _hintCount})",
-                                    style: TextStyle(
+                                    style: GoogleFonts.audiowide(
                                       color: isDark
                                           ? Colors.amber
                                           : const Color(0xE70D698A),
@@ -1102,8 +1103,8 @@ class _GuessGameState extends State<GuessGame>
                           child: Center(
                             child: Text(
                               "Attempts: $_attempts",
-                              style: TextStyle(
-                                fontSize: 17,
+                              style: GoogleFonts.vt323(
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: isDark
                                     ? Colors.white
@@ -1176,7 +1177,7 @@ class _GuessGameState extends State<GuessGame>
 
                                   Text(
                                     "Restart",
-                                    style: TextStyle(
+                                    style: GoogleFonts.audiowide(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w600,
                                       color: isDark
@@ -1213,8 +1214,8 @@ class _GuessGameState extends State<GuessGame>
                           ),
                           child: Text(
                             "🏆 Highest Score: $highestScore attempts",
-                            style: TextStyle(
-                              fontSize: 18,
+                            style: GoogleFonts.electrolize(
+                              fontSize: 15,
                               fontWeight: FontWeight.bold,
                               color: isDark
                                   ? const Color(0xFFFFC107)
@@ -1248,7 +1249,7 @@ class _GuessGameState extends State<GuessGame>
                         children: [
                           Text(
                             "Round History",
-                            style: TextStyle(
+                            style: GoogleFonts.exo2(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
                               color: isDark ? Colors.white: Colors.black,
@@ -1256,7 +1257,7 @@ class _GuessGameState extends State<GuessGame>
                           ),
                           Text(
                             "Last 20 games",
-                            style: TextStyle(
+                            style: GoogleFonts.exo2(
                               fontSize: 12,
                               color: Colors.grey,
                             ),
@@ -1328,7 +1329,7 @@ class _GuessGameState extends State<GuessGame>
                             padding: const EdgeInsets.symmetric(vertical: 20),
                             child: Text(
                               "No rounds played yet",
-                              style: TextStyle(
+                              style: GoogleFonts.exo2(
                                 color: isDark ? Colors.grey : Colors.black54,
                               ),
                             ),
@@ -1371,7 +1372,7 @@ class _GuessGameState extends State<GuessGame>
                                       ),
                                       title: Text(
                                         "Round ${scoreHistory.length - index}",
-                                        style: TextStyle(
+                                        style: GoogleFonts.exo2(
                                           fontWeight: isHighest
                                               ? FontWeight.bold
                                               : FontWeight.normal,
@@ -1387,7 +1388,7 @@ class _GuessGameState extends State<GuessGame>
                                       ),
                                       trailing: Text(
                                         "$score attempts",
-                                        style: TextStyle(
+                                        style: GoogleFonts.electrolize(
                                           fontWeight: isHighest
                                               ? FontWeight.bold
                                               : FontWeight.normal,
@@ -1517,7 +1518,7 @@ class _GuessGameState extends State<GuessGame>
 
                                 Text(
                                   "Clear History",
-                                  style: TextStyle(
+                                  style: GoogleFonts.electrolize(
                                     fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                     color: isDark
