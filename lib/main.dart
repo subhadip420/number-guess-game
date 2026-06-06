@@ -1256,15 +1256,15 @@ class _GuessGameState extends State<GuessGame>
                                   return Card(
                                     color: isHighest
                                         ? (isDark
+                                        ? const Color(0xFF436E67)
+                                        : const Color(0xFF9EE0D3)
+                                        )
+                                        : (isDark
+
                                         ? const Color(0xFFC4EBF5)
                                         .withOpacity(0.4)
-                                        : const Color(0xFF3ABDA6)
-                                        .withOpacity(0.6))
-                                        : (isDark
-                                        ? const Color(0xFF1B263B)
-                                        .withOpacity(0.2)
                                         : const Color(0xFFD2FCF6)
-                                        .withOpacity(0.6)),
+                                        ),
                                     child: ListTile(
                                       leading: const Icon(
                                         Icons.emoji_events,
@@ -1276,6 +1276,14 @@ class _GuessGameState extends State<GuessGame>
                                           fontWeight: isHighest
                                               ? FontWeight.bold
                                               : FontWeight.normal,
+
+                                          color: isHighest
+                                              ? (isDark
+                                              ? Colors.white
+                                              : Colors.black87)
+                                              : (isDark
+                                              ? const Color(0xFFE2E8F0)
+                                              : Colors.black87),
                                         ),
                                       ),
                                       trailing: Text(
@@ -1284,6 +1292,14 @@ class _GuessGameState extends State<GuessGame>
                                           fontWeight: isHighest
                                               ? FontWeight.bold
                                               : FontWeight.normal,
+
+                                          color: isHighest
+                                              ? (isDark
+                                              ? const Color(0xFFFFD54F)
+                                              : const Color(0xFF423014))
+                                              : (isDark
+                                              ? const Color(0xFFB0BEC5)
+                                              : Colors.black54),
                                         ),
                                       ),
                                     ),
@@ -1304,6 +1320,9 @@ class _GuessGameState extends State<GuessGame>
                                     _showAllHistory
                                         ? Icons.expand_less
                                         : Icons.expand_more,
+                                    color: isDark
+                                        ? const Color(0xFF4FC3F7)
+                                        : const Color(0xFF1976D2),
                                   ),
 
                                   label: Text(
