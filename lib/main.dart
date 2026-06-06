@@ -355,17 +355,32 @@ class _GuessGameState extends State<GuessGame>
     await prefs.setBool('soundEnabled', _soundEnabled);
   }
 
-  Future<void> _clearScoreHistoryOnly() async {
-    final prefs = await SharedPreferences.getInstance();
+  // Future<void> _clearScoreHistoryOnly() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //
+  //   await prefs.remove('scoreHistory');
+  //
+  //   setState(() {
+  //     scoreHistory.clear();
+  //   });
+  // }
 
-    await prefs.remove('scoreHistory');
-
-    setState(() {
-      scoreHistory.clear();
-    });
-  }
+  // Future<void> _clearAllHistory() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //
+  //   await prefs.remove('scoreHistory');
+  //   await prefs.remove('highestScore');
+  //
+  //   setState(() {
+  //     scoreHistory.clear();
+  //     highestScore = null;
+  //   });
+  // }
 
   Future<void> _clearAllHistory() async {
+
+    FocusManager.instance.primaryFocus?.unfocus();
+
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.remove('scoreHistory');
@@ -375,6 +390,10 @@ class _GuessGameState extends State<GuessGame>
       scoreHistory.clear();
       highestScore = null;
     });
+
+    Fluttertoast.showToast(
+      msg: "Round history deleted successfully.",
+    );
   }
 
   void _showClearOptions() {
@@ -403,25 +422,39 @@ class _GuessGameState extends State<GuessGame>
                 ),
               ),
 
-              const SizedBox(height: 20),
-
-              ListTile(
-                leading: const Icon(Icons.history),
-                title: const Text("Delete Score History Only."),
-                onTap: () {
-                  Navigator.pop(context);
-                  _clearScoreHistoryOnly();
-                },
+              //const SizedBox(height: 20),
+              Divider(
+                color: Colors.white24,
+                thickness: 1,
               ),
+
+              // ListTile(
+              //   leading: const Icon(Icons.history),
+              //   title: const Text("Delete Score History Only."),
+              //   onTap: () {
+              //     Navigator.pop(context);
+              //     _clearScoreHistoryOnly();
+              //   },
+              // ),
 
               ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
                 title: const Text(
-                  "Delete Highest Score Also.",
+                  "Delete All Round History.",
                   style: TextStyle(color: Colors.red),
                 ),
-                onTap: () {
+                // onTap: () {
+                //   Navigator.pop(context);
+                //   _clearAllHistory();
+                // },
+                onTap: () async {
+
                   Navigator.pop(context);
+
+                  await Future.delayed(
+                    const Duration(milliseconds: 200),
+                  );
+
                   _clearAllHistory();
                 },
               ),
