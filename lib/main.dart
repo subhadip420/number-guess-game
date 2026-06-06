@@ -1313,7 +1313,7 @@ class _GuessGameState extends State<GuessGame>
                                               ? Colors.white
                                               : Colors.black87)
                                               : (isDark
-                                              ? const Color(0xFFE2E8F0)
+                                              ? Colors.white
                                               : Colors.black87),
                                         ),
                                       ),
@@ -1329,7 +1329,7 @@ class _GuessGameState extends State<GuessGame>
                                               ? const Color(0xFFFFD54F)
                                               : const Color(0xFF423014))
                                               : (isDark
-                                              ? const Color(0xFFB0BEC5)
+                                              ? Colors.white
                                               : Colors.black54),
                                         ),
                                       ),
