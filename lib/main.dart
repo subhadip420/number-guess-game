@@ -973,14 +973,14 @@ class _GuessGameState extends State<GuessGame>
                             decoration: BoxDecoration(
                               color: isDark
                                   ? const Color(0xFF032B48)
-                                  : const Color(0xFFFFF8E1),
+                                  : const Color(0xFFF7FFFE),
 
                               borderRadius: BorderRadius.circular(16),
 
                               border: Border.all(
                                 color: isDark
                                     ? Colors.amber :
-                                Colors.deepOrange,
+                                Color(0xE70D698A),
                                 width: 1.5,
                               ),
                             ),
@@ -992,7 +992,7 @@ class _GuessGameState extends State<GuessGame>
                                   Icons.lightbulb_outline,
                                   color: isDark
                                   ? Colors.amber :
-                                  Colors.deepOrange,
+                                  Color(0xE70D698A),
                                   size: 22,
                                 ),
 
@@ -1003,7 +1003,7 @@ class _GuessGameState extends State<GuessGame>
                                   style: TextStyle(
                                     color: isDark
                                         ? Colors.amber :
-                                    Colors.deepOrange,
+                                    Color(0xE70D698A),
                                     fontSize: 12,
                                     fontWeight: FontWeight.w600,
                                   ),
