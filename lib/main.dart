@@ -988,7 +988,7 @@ class _GuessGameState extends State<GuessGame>
                           child: Opacity(
                             opacity: _roundCompleted ? 0.5 : 1.0,
                             child: Container(
-                              //width: 80,
+                              width: 70,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 12,
                                 vertical: 6,
@@ -1012,10 +1012,12 @@ class _GuessGameState extends State<GuessGame>
                                 children: [
 
                                   Icon(
-                                    Icons.lightbulb_outline,
+                                    _hintCount >= 3
+                                        ? Icons.check_circle
+                                        : Icons.lightbulb_outline,
                                     color: isDark
-                                        ? Colors.amber :
-                                    Color(0xE70D698A),
+                                        ? Colors.amber
+                                        : const Color(0xE70D698A),
                                     size: 22,
                                   ),
 
