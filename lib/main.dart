@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
+import 'package:number_guess_game/privacy_policy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'splash_screen.dart';
 import 'glass_settings_menu.dart';
@@ -1647,10 +1648,74 @@ class _GuessGameState extends State<GuessGame>
             widget.toggleTheme();
           },
         ),
+        SettingsMenuItem(
+          title: "Privacy Policy",
+          value: false,
+          isAction: true,
+          iconBuilder: (_) => Icons.privacy_tip_outlined,
+          onChanged: (_) {},
+          onTap: () {
+            Navigator.pop(context);
+
+            _openPrivacyPolicy();
+          },
+        ),
+
+        SettingsMenuItem(
+          title: "About",
+          value: false,
+          isAction: true,
+          iconBuilder: (_) => Icons.info_outline,
+          onChanged: (_) {},
+          onTap: () {
+            Navigator.pop(context);
+
+            _showAboutDialog();
+          },
+        ),
       ],
     );
 
     FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  // void _showAboutDialog() {
+  //   showAboutDialog(
+  //     context: context,
+  //     applicationName: 'Number Guess Challenge',
+  //     applicationVersion: '1.0.0',
+  //     applicationLegalese: '© SP Tech Studios',
+  //   );
+  // }
+
+  void _showAboutDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("About"),
+          content: const Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text("Number Guess Challenge"),
+              SizedBox(height: 8),
+              Text("Version 1.0.0"),
+              SizedBox(height: 8),
+              Text("© SP Tech Studios"),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _openPrivacyPolicy() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => const PrivacyPolicyPage(),
+      ),
+    );
   }
 
 }///End GuessGameState Class
