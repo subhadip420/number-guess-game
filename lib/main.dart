@@ -525,6 +525,23 @@ class _GuessGameState extends State<GuessGame>
       _attempts++;
     });
 
+    if (guess > 100) {
+
+      setState(() {
+        _message =
+        "Number should be less than or equal to 100.";
+      });
+
+      if (_soundEnabled) {
+        await AudioPlayer().play(
+          AssetSource('error.mp3'),
+        );
+      }
+
+      return;
+    }
+
+
     if (guess > _targetNumber) {
       setState(() {
         _message = "Oops! $guess is Too High, \n Try Lower.";
