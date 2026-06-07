@@ -22,6 +22,9 @@ class SettingsMenuItem {
   /// SWITCH CALLBACK
   final Function(bool) onChanged;
 
+  final bool isAction;
+  final VoidCallback? onTap;
+
   SettingsMenuItem({
     required this.iconBuilder,
     this.canChange,
@@ -29,6 +32,8 @@ class SettingsMenuItem {
     required this.value,
     required this.onChanged,
     this.affectsTheme = false,
+    this.isAction = false,
+    this.onTap,
   });
 }
 
@@ -145,28 +150,64 @@ Future<void> showGlassSettingsMenu({
                                 ),
 
                                 /// SWITCH
-                                Transform.scale(
+                                // Transform.scale(
+                                //   scale: 0.85,
+                                //   child: Switch(
+                                //     value: localValues[index],
+                                //     activeThumbColor: Colors.blueAccent,
+                                //     onChanged: (value) async {
+                                //       /// VALIDATION
+                                //       bool allowed =
+                                //           item.canChange?.call(value) ?? true;
+                                //
+                                //       if (!allowed) return;
+                                //       setStateMenu(() {
+                                //         /// UPDATE SWITCH
+                                //         localValues[index] = value;
+                                //
+                                //         /// UPDATE THEME
+                                //         if (item.affectsTheme) {
+                                //           localIsDark = value;
+                                //         }
+                                //       });
+                                //
+                                //       /// CALLBACK
+                                //       item.onChanged(value);
+                                //     },
+                                //   ),
+                                // ),
+
+                                item.isAction
+                                    ? IconButton(
+                                  icon: Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16,
+                                    color: localIsDark
+                                        ? Colors.white70
+                                        : Colors.black54,
+                                  ),
+                                  onPressed: item.onTap,
+                                )
+                                    : Transform.scale(
                                   scale: 0.85,
                                   child: Switch(
                                     value: localValues[index],
                                     activeThumbColor: Colors.blueAccent,
                                     onChanged: (value) async {
-                                      /// VALIDATION
+
                                       bool allowed =
                                           item.canChange?.call(value) ?? true;
 
                                       if (!allowed) return;
+
                                       setStateMenu(() {
-                                        /// UPDATE SWITCH
                                         localValues[index] = value;
 
-                                        /// UPDATE THEME
                                         if (item.affectsTheme) {
                                           localIsDark = value;
                                         }
                                       });
 
-                                      /// CALLBACK
                                       item.onChanged(value);
                                     },
                                   ),
