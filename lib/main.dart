@@ -697,30 +697,28 @@ class _GuessGameState extends State<GuessGame>
             padding: const EdgeInsets.only(right: 10),
             child: Tooltip(
               message: "Settings",
-              child: GestureDetector(
-                onTap: _openSettings,
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  // decoration: BoxDecoration(
-                  //   color: isDark
-                  //       ? const Color(0xFF032B48)
-                  //       : const Color(0xFFF3E5F5),
-                  //
-                  //   borderRadius: BorderRadius.circular(14),
-                  //
-                  //   border: Border.all(
-                  //     color: isDark
-                  //         ? const Color(0xFF06E0F1)
-                  //         : const Color(0xE70D698A),
-                  //     width: 1.5,
-                  //   ),
-                  // ),
-                  child: Icon(
-                    Icons.more_vert_rounded,
-                    size: 22,
-                    color: isDark
-                        ? const Color(0xFF06E0F1)
-                        : const Color(0xE70D698A),
+              child: Material(
+                color: Colors.transparent,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(20),
+
+                  splashColor: isDark
+                      ? Colors.white24
+                      : const Color(0xE70D698A).withOpacity(0.2),
+
+                  highlightColor: Colors.transparent,
+
+                  onTap: _openSettings,
+
+                  child: Container(
+                    padding: const EdgeInsets.all(10),
+                    child: Icon(
+                      Icons.more_vert_rounded,
+                      size: 22,
+                      color: isDark
+                          ? Colors.white
+                          : const Color(0xE70D698A),
+                    ),
                   ),
                 ),
               ),
