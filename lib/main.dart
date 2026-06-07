@@ -825,7 +825,15 @@ class _GuessGameState extends State<GuessGame>
                               controller: _controller,
                               textAlign: TextAlign.center,
                               keyboardType: TextInputType.number,
+
+                              inputFormatters: [
+                                FilteringTextInputFormatter.digitsOnly,
+                              ],
+
                               style: GoogleFonts.electrolize(
+                                color: isDark
+                                    ? Colors.white
+                                    : Colors.black87,
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -833,7 +841,7 @@ class _GuessGameState extends State<GuessGame>
                                 hintText: "00",
                                 hintStyle: GoogleFonts.orbitron(
                                   color: isDark
-                                      ? const Color(0xFFFFFFFF)
+                                      ? const Color(0xFFBBBBBB)
                                       : const Color(0xFFBBBBBB),
                                   fontWeight: FontWeight.w500,
                                 ),
