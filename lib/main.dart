@@ -15,6 +15,7 @@ import 'package:google_fonts/google_fonts.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize Google Mobile Ads
   await MobileAds.instance.initialize();
 
   runApp(const MyApp());
@@ -30,23 +31,25 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-
+  // App theme state (Dark / Light)
   bool isDark = true;
-
+/// Load saved theme from SharedPreferences
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isDark = prefs.getBool('isDark') ?? true;
     });
   }
-
+/// Save theme preference
   Future<void> _saveTheme(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDark', value);
   }
+
   @override
   void initState() {
     super.initState();
+    // Restore previously selected theme
     _loadTheme();
   }
 
@@ -88,57 +91,78 @@ class GuessGame extends StatefulWidget {
 
 class _GuessGameState extends State<GuessGame>
     with SingleTickerProviderStateMixin {
+  // User input controller
   final TextEditingController _controller = TextEditingController();
+  // Random number generator
   final Random _random = Random();
+  // Sound player
   final AudioPlayer _player = AudioPlayer();
-
+  // Confetti animation controller
   late ConfettiController _confettiController;
+
+  // Secret target number
   late int _targetNumber;
 
+  // Wrong guess shake animation
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
 
-
+  // Current game status
   String _message = "Guess a number between 1 and 100";
   int _attempts = 0;
 
+  // Score history and best score
   List<int> scoreHistory = [];
   int? highestScore;
+
   bool _showAllHistory = false;
 
+  // Round state
   bool _roundCompleted = false;
-  bool _soundEnabled = true; // ✅ Added
+  // Sound setting
+  bool _soundEnabled = true;
+  // Button press animation
   bool _clickAnim = false;
-
+  // Banner Ads
   BannerAd? _topBannerAd;
   BannerAd? _bottomBannerAd;
 
   bool _isTopBannerReady = false;
   bool _isBottomBannerReady = false;
 
+  // Native Ad
   NativeAd? _nativeAd;
   bool _isNativeAdLoaded = false;
 
+  // Full-screen Ads
   InterstitialAd? _interstitialAd;
   RewardedAd? _rewardedAd;
 
+  // Gameplay stats
   int _completedRounds = 0;
   int _hintCount = 0;
+
   @override
   void initState() {
     super.initState();
+    // Generate first target number
     _targetNumber = _random.nextInt(100) + 1;
+
+    // Confetti setup
     _confettiController =
         ConfettiController(duration: const Duration(seconds: 2));
 
+    // Load saved data and settings
     _loadSavedData();
     _loadSoundSetting();
 
+    // Load ads
     _loadBannerAds();
     _loadNativeAd();
     _loadInterstitialAd();
     _loadRewardedAd();
 
+    // Shake animation setup
     _shakeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -153,20 +177,21 @@ class _GuessGameState extends State<GuessGame>
 
   @override
   void dispose() {
+    // Dispose animations, audio and ads
     _confettiController.dispose();
     _player.dispose();
-    super.dispose();
-    ///
     _shakeController.dispose();
+
     _topBannerAd?.dispose();
     _bottomBannerAd?.dispose();
     _nativeAd?.dispose();
-    ///
-  }
 
+    super.dispose();
+  }
+/// Load top and bottom banner ads
   void _loadBannerAds() {
 
-    // Top Banner
+    // Top Banner Ad
     _topBannerAd = BannerAd(
       adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
       request: const AdRequest(),
@@ -180,7 +205,7 @@ class _GuessGameState extends State<GuessGame>
       ),
     )..load();
 
-    // Bottom Banner
+    // Bottom Banner Ad
     _bottomBannerAd = BannerAd(
       adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
       request: const AdRequest(),
@@ -194,7 +219,7 @@ class _GuessGameState extends State<GuessGame>
       ),
     )..load();
   }
-
+/// Load native ad for score history section
   void _loadNativeAd() {
     _nativeAd = NativeAd(
       adUnitId: 'ca-app-pub-3940256099942544/2247696110', // Test Native Ad
@@ -220,7 +245,7 @@ class _GuessGameState extends State<GuessGame>
 
     _nativeAd!.load();
   }
-
+/// Load full-screen interstitial ad
   void _loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: 'ca-app-pub-3940256099942544/1033173712',
@@ -235,17 +260,21 @@ class _GuessGameState extends State<GuessGame>
       ),
     );
   }
-
+/// Show full-screen interstitial ad
   void _showInterstitialAd() {
     if (_interstitialAd == null) return;
 
     _interstitialAd!.fullScreenContentCallback =
         FullScreenContentCallback(
+          // Reload ad after closing
           onAdDismissedFullScreenContent: (ad) {
             ad.dispose();
 
             _loadInterstitialAd();
           },
+
+
+          // Reload ad if failed to show
           onAdFailedToShowFullScreenContent: (ad, error) {
             ad.dispose();
 
@@ -257,7 +286,7 @@ class _GuessGameState extends State<GuessGame>
 
     _interstitialAd = null;
   }
-
+/// Load rewarded ad for hints
   void _loadRewardedAd() {
     RewardedAd.load(
       adUnitId:
@@ -274,23 +303,24 @@ class _GuessGameState extends State<GuessGame>
       ),
     );
   }
-
+/// Show rewarded ad and give hint reward
   void _showRewardedAd() {
     if (_rewardedAd == null) return;
 
     _rewardedAd!.show(
       onUserEarnedReward: (ad, reward) {
 
+        // User earned a hint
         _giveHint();
 
       },
     );
 
     _rewardedAd = null;
-
+    // Preload next rewarded ad
     _loadRewardedAd();
   }
-
+/// Generate progressive hints for current target number
   void _giveHint() {
 
     _hintCount++;
@@ -298,13 +328,14 @@ class _GuessGameState extends State<GuessGame>
     String hint = "";
 
     switch (_hintCount) {
-
+    // Hint 1: Higher or lower than 50
       case 1:
         hint = _targetNumber > 50
             ? "💡 Number is Greater than 50"
             : "💡 Number is Less than or Equal to 50";
         break;
 
+    // Hint 2: Number range
       case 2:
         int start = (_targetNumber ~/ 10) * 10;
         int end = start + 10;
@@ -312,6 +343,7 @@ class _GuessGameState extends State<GuessGame>
         hint = "💡 Number is between $start and $end";
         break;
 
+    // Hint 3: Odd or even
       case 3:
         hint = _targetNumber % 2 == 0
             ? "💡 Number is Even"
@@ -323,20 +355,20 @@ class _GuessGameState extends State<GuessGame>
       _message = hint;
     });
   }
-
+/// Load sound preference
   Future<void> _loadSoundSetting() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _soundEnabled = prefs.getBool('soundEnabled') ?? true;
     });
   }
-
+/// Save sound preference
   Future<void> _saveSoundSetting() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('soundEnabled', _soundEnabled);
   }
 
-
+/// Clear saved score history and best score
   Future<void> _clearAllHistory() async {
 
     FocusManager.instance.primaryFocus?.unfocus();
@@ -356,6 +388,7 @@ class _GuessGameState extends State<GuessGame>
     );
   }
 
+  /// Show clear history bottom sheet
   void _showClearOptions() {
     showModalBottomSheet(
       context: context,
@@ -388,7 +421,7 @@ class _GuessGameState extends State<GuessGame>
                 thickness: 1,
               ),
 
-
+              // Delete all saved round history
               ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
                 title: const Text(
@@ -397,7 +430,6 @@ class _GuessGameState extends State<GuessGame>
                 ),
 
                 onTap: () async {
-
                   Navigator.pop(context);
 
                   await Future.delayed(
@@ -416,7 +448,7 @@ class _GuessGameState extends State<GuessGame>
     );
   }
 
-
+/// Load score history and best score
   Future<void> _loadSavedData() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -432,6 +464,7 @@ class _GuessGameState extends State<GuessGame>
     });
   }
 
+  /// Save score history and best score
   Future<void> _saveData() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -445,15 +478,17 @@ class _GuessGameState extends State<GuessGame>
   }
 
 
-
+/// Validate and process user guess
   void _checkGuess() async {
-
+  // Hide keyboard
     FocusScope.of(context).unfocus();
 
+  // Ignore input if round already completed
     if (_roundCompleted) return;
 
     int? guess = int.tryParse(_controller.text);
 
+    // Handle invalid input
     if (guess == null) {
       setState(() {
         _message = "Enter valid number!";
@@ -469,10 +504,12 @@ class _GuessGameState extends State<GuessGame>
       return;
     }
 
+    // Increase attempt count
     setState(() {
       _attempts++;
     });
 
+    // Limit guess range to 1-100
     if (guess > 100) {
 
       setState(() {
@@ -489,7 +526,7 @@ class _GuessGameState extends State<GuessGame>
       return;
     }
 
-
+    // Guess is higher than target number
     if (guess > _targetNumber) {
       setState(() {
         _message = "Oops! $guess is Too High, \n Try Lower.";
@@ -499,6 +536,7 @@ class _GuessGameState extends State<GuessGame>
         await AudioPlayer().play(AssetSource('high.mp3'));
       }
     }
+    // Guess is lower than target number
     else if (guess < _targetNumber) {
       setState(() {
         _message = "Oops! $guess is Too Low, \n Try Higher.";
@@ -508,57 +546,65 @@ class _GuessGameState extends State<GuessGame>
         await AudioPlayer().play(AssetSource('low.mp3'));
       }
     }
+    // Correct guess
     else {
 
+      // Track completed rounds
       _completedRounds++;
 
       setState(() {
         _message = "Congrats! You guessed it in $_attempts attempt(s). 🎉";
         _roundCompleted = true;
 
+        // Add score to history
         scoreHistory.insert(0, _attempts);
 
+        // Keep only latest 20 records
         if (scoreHistory.length > 20) {
           scoreHistory.removeLast();
         }
 
+        // Update best score
         if (highestScore == null || _attempts < highestScore!) {
           highestScore = _attempts;
         }
       });
 
+      // Play celebration animation
       _confettiController.play();
 
       if (_soundEnabled) {
-        // await _player.play(AssetSource('success.mp3'));
         await AudioPlayer().play(AssetSource('success.mp3'));
       }
 
+      // Save updated records
       await _saveData();
     }
   }
 
-
+  // Start a new round
   Future<void> _nextRound() async {
-
+    // Play restart sound
     if (_soundEnabled) {
       await AudioPlayer().play(
         AssetSource('restart.mp3'),
       );
     }
 
-    // Every 3 completed games
+    // Show interstitial ad after every 3 completed rounds
     if (_completedRounds > 0 &&
         _completedRounds % 3 == 0) {
       _showInterstitialAd();
     }
 
     setState(() {
+      // Generate new target number
       _targetNumber = _random.nextInt(100) + 1;
       _attempts = 0;
       _message = "New Round! Guess again.";
       _controller.clear();
       _roundCompleted = false;
+      // Reset hint counter
       _hintCount = 0;
     });
   }
@@ -571,6 +617,7 @@ class _GuessGameState extends State<GuessGame>
 
     return Scaffold(
 
+      // Glassmorphism AppBar
       appBar: AppBar(
         centerTitle: true,
         elevation: 0,
@@ -580,6 +627,7 @@ class _GuessGameState extends State<GuessGame>
         foregroundColor:
         isDark ? Colors.white : Colors.black,
 
+        // Status bar styling
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
           statusBarIconBrightness:
@@ -588,6 +636,7 @@ class _GuessGameState extends State<GuessGame>
           isDark ? Brightness.dark : Brightness.light,
         ),
 
+        // Glass blur background
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(
@@ -612,8 +661,7 @@ class _GuessGameState extends State<GuessGame>
           ),
         ),
 
-        //toolbarHeight: 65,
-
+        // Game title
         title: Text(
           "Number Guess Challenge",
           overflow: TextOverflow.ellipsis,
@@ -624,6 +672,7 @@ class _GuessGameState extends State<GuessGame>
           ),
         ),
 
+        // Settings menu button
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10),
@@ -668,6 +717,7 @@ class _GuessGameState extends State<GuessGame>
       )
           : null,
 
+      // Main game screen UI
       body: Container(
         decoration: BoxDecoration(
           gradient: isDark
@@ -695,6 +745,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 20),
 
+                    // Top banner advertisement
                     if (_isTopBannerReady)
                       Center(
                         child: SizedBox(
@@ -706,7 +757,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 30),
 
-                    /// Main Card
+                    // Main game card
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
                       decoration: BoxDecoration(
@@ -735,6 +786,7 @@ class _GuessGameState extends State<GuessGame>
                       child: Column(
                         children: [
 
+                          // Game title
                           Text(
                             "Guess the Number",
                             style: GoogleFonts.orbitron(
@@ -756,7 +808,7 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 20),
 
-
+                          // User number input field with shake animation
                           AnimatedBuilder(
                             animation: _shakeController,
                             builder: (context, child) {
@@ -811,8 +863,7 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 25),
 
-                          // guess button start
-
+                          // Guess button
                           GestureDetector(
                             onTap: _roundCompleted
                                 ? null
@@ -829,9 +880,11 @@ class _GuessGameState extends State<GuessGame>
 
                               _checkGuess();
                             },
+                            // Button press animation
                             child: AnimatedScale(
                               duration: const Duration(milliseconds: 100),
                               scale: _clickAnim ? 0.92 : 1.0,
+                              // Disable button after round completion
                               child: Opacity(
                                 opacity: _roundCompleted ? 0.5 : 1.0,
                                 child: Container(
@@ -876,6 +929,7 @@ class _GuessGameState extends State<GuessGame>
                                     ],
                                   ),
                                   child: Center(
+                                    // Dynamic button state (Guess / Completed)
                                     child: Text(
                                       _roundCompleted ? "COMPLETED" : "GUESS",
                                       style: GoogleFonts.audiowide(
@@ -890,10 +944,9 @@ class _GuessGameState extends State<GuessGame>
                             ),
                           ),
 
-                          // guess button end
-
                           const SizedBox(height: 20),
 
+                          // Animated game feedback message
                           AnimatedSwitcher(
                             duration: const Duration(milliseconds: 400),
                             child: Text(
@@ -915,10 +968,14 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 25),
 
+                    // Hint and restart controls
                     Row(
                       children: [
+                        // Rewarded hint button
                         GestureDetector(
                           onTap: () {
+
+                            // Disable hints after round completion
                             if (_roundCompleted) {
                               Fluttertoast.showToast(
                                 msg: "Round completed. Start a new round.",
@@ -927,6 +984,7 @@ class _GuessGameState extends State<GuessGame>
                               return;
                             }
 
+                            // Maximum 3 hints per round
                             if (_hintCount >= 3) {
                               Fluttertoast.showToast(
                                 msg: "You can get hints up to 3 times per round.",
@@ -935,6 +993,7 @@ class _GuessGameState extends State<GuessGame>
                               return;
                             }
 
+                            // Rewarded ad not ready yet
                             if (_rewardedAd == null) {
                               Fluttertoast.showToast(
                                 msg: "Hint is loading. Please try again.",
@@ -945,11 +1004,13 @@ class _GuessGameState extends State<GuessGame>
                               return;
                             }
 
+                            // Show rewarded ad and give hint
                             _showRewardedAd();
                           },
 
                           child: Opacity(
                             opacity: _roundCompleted ? 0.5 : 1.0,
+                            // Hint button with remaining hint count
                             child: Container(
                               width: 82,
                               padding: const EdgeInsets.symmetric(
@@ -970,6 +1031,7 @@ class _GuessGameState extends State<GuessGame>
                                   width: 1.5,
                                 ),
 
+                                // Disable glow when hints are exhausted
                                 boxShadow: _roundCompleted || _hintCount >= 3
                                     ? []
                                     : [
@@ -998,6 +1060,7 @@ class _GuessGameState extends State<GuessGame>
 
                                   const SizedBox(height: 4),
 
+                                  // Dynamic hint state (Hint / Used)
                                   Text(
                                     _hintCount >= 3
                                         ? "Used"
@@ -1016,9 +1079,7 @@ class _GuessGameState extends State<GuessGame>
                           ),
                         ),
 
-
-
-                        /// ATTEMPTS CENTER
+                        // Current attempt counter
                         Expanded(
                           child: Center(
                             child: Text(
@@ -1034,10 +1095,11 @@ class _GuessGameState extends State<GuessGame>
                           ),
                         ),
 
-                        /// RESTART BUTTON
+                        // Restart current round
                         GestureDetector(
                           onTap: () async {
 
+                            // Prevent restart before first guess
                             if (_attempts == 0) {
                               Fluttertoast.showToast(
                                 msg: "Make a guess before restarting.",
@@ -1045,6 +1107,7 @@ class _GuessGameState extends State<GuessGame>
                               return;
                             }
 
+                            // Start a new round
                             _nextRound();
                           },
                           child: Opacity(
@@ -1069,6 +1132,7 @@ class _GuessGameState extends State<GuessGame>
                                   width: 1.5,
                                 ),
 
+                                // Disable glow when restart is unavailable
                                 boxShadow: _attempts == 0
                                     ? []
                                     : [
@@ -1115,6 +1179,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 15),
 
+                    // High score badge
                     if (highestScore != null)
                       Center(
                         child: Container(
@@ -1152,9 +1217,7 @@ class _GuessGameState extends State<GuessGame>
                       ),
                     const SizedBox(height: 20),
 
-
-                    /// Score History Section
-
+                    // Round history section
                     Container(
                       width: double.infinity,
                       padding: const EdgeInsets.all(10),
@@ -1173,6 +1236,7 @@ class _GuessGameState extends State<GuessGame>
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
+                          // History section header
                           Text(
                             "Round History",
                             style: GoogleFonts.exo2(
@@ -1200,7 +1264,7 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 5),
 
-
+                          // Show empty state when no rounds are played
                           scoreHistory.isEmpty
                               ? Padding(
                             padding: const EdgeInsets.symmetric(vertical: 20),
@@ -1214,6 +1278,7 @@ class _GuessGameState extends State<GuessGame>
                               : Column(
                             children: [
 
+                              // Display recent round records
                               ListView.builder(
                                 shrinkWrap: true,
                                 physics: const NeverScrollableScrollPhysics(),
@@ -1227,6 +1292,8 @@ class _GuessGameState extends State<GuessGame>
                                 itemBuilder: (context, index) {
 
                                   int score = scoreHistory[index];
+
+                                  // Highlight best score entry
                                   bool isHighest =
                                       score == highestScore;
 
@@ -1284,7 +1351,9 @@ class _GuessGameState extends State<GuessGame>
                                 },
                               ),
 
+                              // Expand / collapse history list
                               if (scoreHistory.length > 5)
+                              // View more / less history
                                 TextButton.icon(
                                   onPressed: () {
                                     setState(() {
@@ -1322,12 +1391,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 16),
 
-                    // if (_isNativeAdLoaded)
-                    //   SizedBox(
-                    //     height: 350,
-                    //     child: AdWidget(ad: _nativeAd!),
-                    //   ),
-
+                    // Native advertisement
                     if (_isNativeAdLoaded)
                       Container(
                         height: 350,
@@ -1339,6 +1403,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 20),
 
+                    // Clear saved history button
                     if (scoreHistory.isNotEmpty)
                       Center(
                         child: GestureDetector(
@@ -1398,21 +1463,21 @@ class _GuessGameState extends State<GuessGame>
                 ),
               ),
 
+              // Celebration confetti animation
               ConfettiWidget(
                 confettiController: _confettiController,
                 blastDirectionality:
                 BlastDirectionality.explosive,
                 shouldLoop: false,
               ),
-
-            ], // ✅ Stack children closed
+            ],
           ),
         ),
       ),
     );
   }
 
-
+// Open settings menu
   Future<void> _openSettings() async {
     FocusManager.instance.primaryFocus?.unfocus();
     await showGlassSettingsMenu(
@@ -1420,6 +1485,7 @@ class _GuessGameState extends State<GuessGame>
       isDark: widget.isDark,
 
       items: [
+        // Sound preference
         SettingsMenuItem(
           title: "Sound",
           value: _soundEnabled,
@@ -1436,6 +1502,7 @@ class _GuessGameState extends State<GuessGame>
           },
         ),
 
+        // Theme switch
         SettingsMenuItem(
           title: "Dark Mode",
           value: widget.isDark,
@@ -1449,6 +1516,8 @@ class _GuessGameState extends State<GuessGame>
             widget.toggleTheme();
           },
         ),
+
+        // Privacy policy page
         SettingsMenuItem(
           title: "Privacy Policy",
           value: false,
@@ -1462,6 +1531,7 @@ class _GuessGameState extends State<GuessGame>
           },
         ),
 
+        // App information
         SettingsMenuItem(
           title: "About",
           value: false,
@@ -1480,7 +1550,7 @@ class _GuessGameState extends State<GuessGame>
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-
+/// Show app information dialog
   void _showAboutDialog() {
     showDialog(
       context: context,
@@ -1502,6 +1572,7 @@ class _GuessGameState extends State<GuessGame>
     );
   }
 
+  /// Open privacy policy page
   void _openPrivacyPolicy() {
     Navigator.push(
       context,
