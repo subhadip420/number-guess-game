@@ -21,7 +21,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -30,17 +29,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   // App theme state (Dark / Light)
   bool isDark = true;
-/// Load saved theme from SharedPreferences
+
+  /// Load saved theme from SharedPreferences
   Future<void> _loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       isDark = prefs.getBool('isDark') ?? true;
     });
   }
-/// Save theme preference
+
+  /// Save theme preference
   Future<void> _saveTheme(bool value) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isDark', value);
@@ -53,17 +53,15 @@ class _MyAppState extends State<MyApp> {
     _loadTheme();
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         brightness: isDark ? Brightness.dark : Brightness.light,
-        scaffoldBackgroundColor:
-        isDark ? const Color(0xFF1E1E2C) : Colors.lightBlue.shade50,
+        scaffoldBackgroundColor: isDark
+            ? const Color(0xFF1E1E2C)
+            : Colors.lightBlue.shade50,
       ),
       home: GuessGame(
         toggleTheme: () async {
@@ -82,8 +80,7 @@ class GuessGame extends StatefulWidget {
   final VoidCallback toggleTheme;
   final bool isDark;
 
-  const GuessGame(
-      {super.key, required this.toggleTheme, required this.isDark});
+  const GuessGame({super.key, required this.toggleTheme, required this.isDark});
 
   @override
   State<GuessGame> createState() => _GuessGameState();
@@ -93,10 +90,13 @@ class _GuessGameState extends State<GuessGame>
     with SingleTickerProviderStateMixin {
   // User input controller
   final TextEditingController _controller = TextEditingController();
+
   // Random number generator
   final Random _random = Random();
+
   // Sound player
   final AudioPlayer _player = AudioPlayer();
+
   // Confetti animation controller
   late ConfettiController _confettiController;
 
@@ -119,10 +119,13 @@ class _GuessGameState extends State<GuessGame>
 
   // Round state
   bool _roundCompleted = false;
+
   // Sound setting
   bool _soundEnabled = true;
+
   // Button press animation
   bool _clickAnim = false;
+
   // Banner Ads
   BannerAd? _topBannerAd;
   BannerAd? _bottomBannerAd;
@@ -149,8 +152,9 @@ class _GuessGameState extends State<GuessGame>
     _targetNumber = _random.nextInt(100) + 1;
 
     // Confetti setup
-    _confettiController =
-        ConfettiController(duration: const Duration(seconds: 2));
+    _confettiController = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
 
     // Load saved data and settings
     _loadSavedData();
@@ -172,7 +176,6 @@ class _GuessGameState extends State<GuessGame>
       parent: _shakeController,
       curve: Curves.easeInOut,
     );
-
   }
 
   @override
@@ -188,9 +191,9 @@ class _GuessGameState extends State<GuessGame>
 
     super.dispose();
   }
-/// Load top and bottom banner ads
-  void _loadBannerAds() {
 
+  /// Load top and bottom banner ads
+  void _loadBannerAds() {
     // Top Banner Ad
     _topBannerAd = BannerAd(
       adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
@@ -219,7 +222,8 @@ class _GuessGameState extends State<GuessGame>
       ),
     )..load();
   }
-/// Load native ad for score history section
+
+  /// Load native ad for score history section
   void _loadNativeAd() {
     _nativeAd = NativeAd(
       adUnitId: 'ca-app-pub-3940256099942544/2247696110', // Test Native Ad
@@ -245,7 +249,8 @@ class _GuessGameState extends State<GuessGame>
 
     _nativeAd!.load();
   }
-/// Load full-screen interstitial ad
+
+  /// Load full-screen interstitial ad
   void _loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: 'ca-app-pub-3940256099942544/1033173712',
@@ -260,40 +265,38 @@ class _GuessGameState extends State<GuessGame>
       ),
     );
   }
-/// Show full-screen interstitial ad
+
+  /// Show full-screen interstitial ad
   void _showInterstitialAd() {
     if (_interstitialAd == null) return;
 
-    _interstitialAd!.fullScreenContentCallback =
-        FullScreenContentCallback(
-          // Reload ad after closing
-          onAdDismissedFullScreenContent: (ad) {
-            ad.dispose();
+    _interstitialAd!.fullScreenContentCallback = FullScreenContentCallback(
+      // Reload ad after closing
+      onAdDismissedFullScreenContent: (ad) {
+        ad.dispose();
 
-            _loadInterstitialAd();
-          },
+        _loadInterstitialAd();
+      },
 
+      // Reload ad if failed to show
+      onAdFailedToShowFullScreenContent: (ad, error) {
+        ad.dispose();
 
-          // Reload ad if failed to show
-          onAdFailedToShowFullScreenContent: (ad, error) {
-            ad.dispose();
-
-            _loadInterstitialAd();
-          },
-        );
+        _loadInterstitialAd();
+      },
+    );
 
     _interstitialAd!.show();
 
     _interstitialAd = null;
   }
-/// Load rewarded ad for hints
+
+  /// Load rewarded ad for hints
   void _loadRewardedAd() {
     RewardedAd.load(
-      adUnitId:
-      'ca-app-pub-3940256099942544/5224354917',
+      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
       request: const AdRequest(),
-      rewardedAdLoadCallback:
-      RewardedAdLoadCallback(
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
           _rewardedAd = ad;
         },
@@ -303,16 +306,15 @@ class _GuessGameState extends State<GuessGame>
       ),
     );
   }
-/// Show rewarded ad and give hint reward
+
+  /// Show rewarded ad and give hint reward
   void _showRewardedAd() {
     if (_rewardedAd == null) return;
 
     _rewardedAd!.show(
       onUserEarnedReward: (ad, reward) {
-
         // User earned a hint
         _giveHint();
-
       },
     );
 
@@ -320,22 +322,22 @@ class _GuessGameState extends State<GuessGame>
     // Preload next rewarded ad
     _loadRewardedAd();
   }
-/// Generate progressive hints for current target number
-  void _giveHint() {
 
+  /// Generate progressive hints for current target number
+  void _giveHint() {
     _hintCount++;
 
     String hint = "";
 
     switch (_hintCount) {
-    // Hint 1: Higher or lower than 50
+      // Hint 1: Higher or lower than 50
       case 1:
         hint = _targetNumber > 50
             ? "💡 Number is Greater than 50"
             : "💡 Number is Less than or Equal to 50";
         break;
 
-    // Hint 2: Number range
+      // Hint 2: Number range
       case 2:
         int start = (_targetNumber ~/ 10) * 10;
         int end = start + 10;
@@ -343,7 +345,7 @@ class _GuessGameState extends State<GuessGame>
         hint = "💡 Number is between $start and $end";
         break;
 
-    // Hint 3: Odd or even
+      // Hint 3: Odd or even
       case 3:
         hint = _targetNumber % 2 == 0
             ? "💡 Number is Even"
@@ -355,22 +357,23 @@ class _GuessGameState extends State<GuessGame>
       _message = hint;
     });
   }
-/// Load sound preference
+
+  /// Load sound preference
   Future<void> _loadSoundSetting() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
       _soundEnabled = prefs.getBool('soundEnabled') ?? true;
     });
   }
-/// Save sound preference
+
+  /// Save sound preference
   Future<void> _saveSoundSetting() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('soundEnabled', _soundEnabled);
   }
 
-/// Clear saved score history and best score
+  /// Clear saved score history and best score
   Future<void> _clearAllHistory() async {
-
     FocusManager.instance.primaryFocus?.unfocus();
 
     final prefs = await SharedPreferences.getInstance();
@@ -383,22 +386,16 @@ class _GuessGameState extends State<GuessGame>
       highestScore = null;
     });
 
-    Fluttertoast.showToast(
-      msg: "Round history deleted successfully.",
-    );
+    Fluttertoast.showToast(msg: "Round history deleted successfully.");
   }
 
   /// Show clear history bottom sheet
   void _showClearOptions() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: widget.isDark
-          ? const Color(0xFF1C1C2E)
-          : Colors.white,
+      backgroundColor: widget.isDark ? const Color(0xFF1C1C2E) : Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       builder: (context) {
         return Padding(
@@ -406,20 +403,13 @@ class _GuessGameState extends State<GuessGame>
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-
               const Text(
                 "Clear History",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
 
               //const SizedBox(height: 20),
-              Divider(
-                color: Colors.white24,
-                thickness: 1,
-              ),
+              Divider(color: Colors.white24, thickness: 1),
 
               // Delete all saved round history
               ListTile(
@@ -432,9 +422,7 @@ class _GuessGameState extends State<GuessGame>
                 onTap: () async {
                   Navigator.pop(context);
 
-                  await Future.delayed(
-                    const Duration(milliseconds: 200),
-                  );
+                  await Future.delayed(const Duration(milliseconds: 200));
 
                   _clearAllHistory();
                 },
@@ -448,7 +436,7 @@ class _GuessGameState extends State<GuessGame>
     );
   }
 
-/// Load score history and best score
+  /// Load score history and best score
   Future<void> _loadSavedData() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -457,8 +445,7 @@ class _GuessGameState extends State<GuessGame>
 
     setState(() {
       if (savedScores != null) {
-        scoreHistory =
-            savedScores.map((e) => int.parse(e)).toList();
+        scoreHistory = savedScores.map((e) => int.parse(e)).toList();
       }
       highestScore = savedHighest;
     });
@@ -469,21 +456,21 @@ class _GuessGameState extends State<GuessGame>
     final prefs = await SharedPreferences.getInstance();
 
     await prefs.setStringList(
-        'scoreHistory',
-        scoreHistory.map((e) => e.toString()).toList());
+      'scoreHistory',
+      scoreHistory.map((e) => e.toString()).toList(),
+    );
 
     if (highestScore != null) {
       await prefs.setInt('highestScore', highestScore!);
     }
   }
 
-
-/// Validate and process user guess
+  /// Validate and process user guess
   void _checkGuess() async {
-  // Hide keyboard
+    // Hide keyboard
     FocusScope.of(context).unfocus();
 
-  // Ignore input if round already completed
+    // Ignore input if round already completed
     if (_roundCompleted) return;
 
     int? guess = int.tryParse(_controller.text);
@@ -495,9 +482,7 @@ class _GuessGameState extends State<GuessGame>
       });
 
       if (_soundEnabled) {
-        await AudioPlayer().play(
-          AssetSource('error.mp3'),
-        );
+        await AudioPlayer().play(AssetSource('error.mp3'));
       }
 
       _shakeController.forward(from: 0);
@@ -511,16 +496,12 @@ class _GuessGameState extends State<GuessGame>
 
     // Limit guess range to 1-100
     if (guess > 100) {
-
       setState(() {
-        _message =
-        "Number should be less than or equal to 100.";
+        _message = "Number should be less than or equal to 100.";
       });
 
       if (_soundEnabled) {
-        await AudioPlayer().play(
-          AssetSource('error.mp3'),
-        );
+        await AudioPlayer().play(AssetSource('error.mp3'));
       }
 
       return;
@@ -548,7 +529,6 @@ class _GuessGameState extends State<GuessGame>
     }
     // Correct guess
     else {
-
       // Track completed rounds
       _completedRounds++;
 
@@ -586,14 +566,11 @@ class _GuessGameState extends State<GuessGame>
   Future<void> _nextRound() async {
     // Play restart sound
     if (_soundEnabled) {
-      await AudioPlayer().play(
-        AssetSource('restart.mp3'),
-      );
+      await AudioPlayer().play(AssetSource('restart.mp3'));
     }
 
     // Show interstitial ad after every 3 completed rounds
-    if (_completedRounds > 0 &&
-        _completedRounds % 3 == 0) {
+    if (_completedRounds > 0 && _completedRounds % 3 == 0) {
       _showInterstitialAd();
     }
 
@@ -609,14 +586,11 @@ class _GuessGameState extends State<GuessGame>
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     bool isDark = widget.isDark;
 
     return Scaffold(
-
       // Glassmorphism AppBar
       appBar: AppBar(
         centerTitle: true,
@@ -624,36 +598,30 @@ class _GuessGameState extends State<GuessGame>
         scrolledUnderElevation: 0,
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
-        foregroundColor:
-        isDark ? Colors.white : Colors.black,
+        foregroundColor: isDark ? Colors.white : Colors.black,
 
         // Status bar styling
         systemOverlayStyle: SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
-          statusBarIconBrightness:
-          isDark ? Brightness.light : Brightness.dark,
-          statusBarBrightness:
-          isDark ? Brightness.dark : Brightness.light,
+          statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
+          statusBarBrightness: isDark ? Brightness.dark : Brightness.light,
         ),
 
         // Glass blur background
         flexibleSpace: ClipRRect(
           child: BackdropFilter(
-            filter: ImageFilter.blur(
-              sigmaX: 20,
-              sigmaY: 20,
-            ),
+            filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
             child: Container(
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.white.withValues(alpha:0.05)
-                    : Colors.white.withValues(alpha:0.18),
+                    ? Colors.white.withValues(alpha: 0.05)
+                    : Colors.white.withValues(alpha: 0.18),
 
                 border: Border(
                   bottom: BorderSide(
                     color: isDark
-                        ? Colors.white.withValues(alpha:0.08)
-                        : Colors.black.withValues(alpha:0.08),
+                        ? Colors.white.withValues(alpha: 0.08)
+                        : Colors.black.withValues(alpha: 0.08),
                   ),
                 ),
               ),
@@ -668,7 +636,7 @@ class _GuessGameState extends State<GuessGame>
           style: GoogleFonts.vt323(
             fontSize: 25,
             fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white: const Color(0xE7052C3A),
+            color: isDark ? Colors.white : const Color(0xE7052C3A),
           ),
         ),
 
@@ -685,7 +653,7 @@ class _GuessGameState extends State<GuessGame>
 
                   splashColor: isDark
                       ? Colors.white24
-                      : const Color(0xE70D698A).withValues(alpha:0.2),
+                      : const Color(0xE70D698A).withValues(alpha: 0.2),
 
                   highlightColor: Colors.transparent,
 
@@ -696,9 +664,7 @@ class _GuessGameState extends State<GuessGame>
                     child: Icon(
                       Icons.more_vert_rounded,
                       size: 22,
-                      color: isDark
-                          ? Colors.white
-                          : const Color(0xE70D698A),
+                      color: isDark ? Colors.white : const Color(0xE70D698A),
                     ),
                   ),
                 ),
@@ -712,9 +678,9 @@ class _GuessGameState extends State<GuessGame>
 
       bottomNavigationBar: _isBottomBannerReady
           ? SizedBox(
-        height: _bottomBannerAd!.size.height.toDouble(),
-        child: AdWidget(ad: _bottomBannerAd!),
-      )
+              height: _bottomBannerAd!.size.height.toDouble(),
+              child: AdWidget(ad: _bottomBannerAd!),
+            )
           : null,
 
       // Main game screen UI
@@ -722,15 +688,19 @@ class _GuessGameState extends State<GuessGame>
         decoration: BoxDecoration(
           gradient: isDark
               ? const LinearGradient(
-            colors: [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )
+                  colors: [
+                    Color(0xFF0F2027),
+                    Color(0xFF203A43),
+                    Color(0xFF2C5364),
+                  ],
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                )
               : const LinearGradient(
-            colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+                  colors: [Color(0xFFB2EBF2), Color(0xFFE0F7FA)],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
         ),
         child: SafeArea(
           child: Stack(
@@ -742,7 +712,6 @@ class _GuessGameState extends State<GuessGame>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     const SizedBox(height: 20),
 
                     // Top banner advertisement
@@ -762,13 +731,13 @@ class _GuessGameState extends State<GuessGame>
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF16213E).withValues(alpha:0.9)
+                            ? const Color(0xFF16213E).withValues(alpha: 0.9)
                             : const Color(0xFFDFFAF1),
                         borderRadius: BorderRadius.circular(25),
 
                         border: Border.all(
                           color: isDark
-                              ? const Color(0xFF0E4286).withValues(alpha:0.9)
+                              ? const Color(0xFF0E4286).withValues(alpha: 0.9)
                               : const Color(0xFF70C0AE),
                           width: 4,
                         ),
@@ -776,21 +745,20 @@ class _GuessGameState extends State<GuessGame>
                         boxShadow: [
                           BoxShadow(
                             color: isDark
-                                ? Colors.blueAccent.withValues(alpha:0.6)
-                                : Colors.black.withValues(alpha:0.1),
+                                ? Colors.blueAccent.withValues(alpha: 0.6)
+                                : Colors.black.withValues(alpha: 0.1),
                             blurRadius: 25,
                             spreadRadius: 2,
-                          )
+                          ),
                         ],
                       ),
                       child: Column(
                         children: [
-
                           // Game title
                           Text(
                             "Guess the Number",
                             style: GoogleFonts.orbitron(
-                              color: isDark ? Colors.white: Colors.black,
+                              color: isDark ? Colors.white : Colors.black,
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                             ),
@@ -801,8 +769,8 @@ class _GuessGameState extends State<GuessGame>
                           Text(
                             "Enter a number (1-100)",
                             style: GoogleFonts.exo2(
-                                fontSize: 13,
-                              color: isDark ? Colors.white: Colors.black,
+                              fontSize: 13,
+                              color: isDark ? Colors.white : Colors.black,
                             ),
                           ),
 
@@ -812,8 +780,11 @@ class _GuessGameState extends State<GuessGame>
                           AnimatedBuilder(
                             animation: _shakeController,
                             builder: (context, child) {
-                              double shake = 8 *
-                                  sin(_shakeController.value * 3 * 3.1416); // smooth sine shake
+                              double shake =
+                                  8 *
+                                  sin(
+                                    _shakeController.value * 3 * 3.1416,
+                                  ); // smooth sine shake
 
                               return Transform.translate(
                                 offset: Offset(shake, 0),
@@ -830,9 +801,7 @@ class _GuessGameState extends State<GuessGame>
                               ],
 
                               style: GoogleFonts.electrolize(
-                                color: isDark
-                                    ? Colors.white
-                                    : Colors.black87,
+                                color: isDark ? Colors.white : Colors.black87,
                                 fontSize: 28,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -868,18 +837,20 @@ class _GuessGameState extends State<GuessGame>
                             onTap: _roundCompleted
                                 ? null
                                 : () async {
-                              setState(() {
-                                _clickAnim = true;
-                              });
+                                    setState(() {
+                                      _clickAnim = true;
+                                    });
 
-                              await Future.delayed(const Duration(milliseconds: 100));
+                                    await Future.delayed(
+                                      const Duration(milliseconds: 100),
+                                    );
 
-                              setState(() {
-                                _clickAnim = false;
-                              });
+                                    setState(() {
+                                      _clickAnim = false;
+                                    });
 
-                              _checkGuess();
-                            },
+                                    _checkGuess();
+                                  },
                             // Button press animation
                             child: AnimatedScale(
                               duration: const Duration(milliseconds: 100),
@@ -889,44 +860,50 @@ class _GuessGameState extends State<GuessGame>
                                 opacity: _roundCompleted ? 0.5 : 1.0,
                                 child: Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(vertical: 15),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 15,
+                                  ),
                                   decoration: BoxDecoration(
                                     gradient: _roundCompleted
                                         ? LinearGradient(
-                                      colors: [
-                                        Colors.grey.shade500,
-                                        Colors.grey.shade400,
-                                      ],
-                                    )
+                                            colors: [
+                                              Colors.grey.shade500,
+                                              Colors.grey.shade400,
+                                            ],
+                                          )
                                         : (isDark
-                                        ? const LinearGradient(
-                                      colors: [
-                                        Color(0xE70D698A),
-                                        Color(0xAB126A91),
-                                      ],
-                                      begin: Alignment.topLeft,
-                                      end: Alignment.bottomRight,
-                                    )
-                                        : const LinearGradient(
-                                      colors: [
-                                        Color(0xFF15C2BD),
-                                        Color(0xFF019FAB),
-                                      ],
-                                    )),
+                                              ? const LinearGradient(
+                                                  colors: [
+                                                    Color(0xE70D698A),
+                                                    Color(0xAB126A91),
+                                                  ],
+                                                  begin: Alignment.topLeft,
+                                                  end: Alignment.bottomRight,
+                                                )
+                                              : const LinearGradient(
+                                                  colors: [
+                                                    Color(0xFF15C2BD),
+                                                    Color(0xFF019FAB),
+                                                  ],
+                                                )),
 
                                     borderRadius: BorderRadius.circular(30),
 
                                     boxShadow: _roundCompleted
                                         ? []
                                         : [
-                                      BoxShadow(
-                                        color: isDark
-                                            ? const Color(0xE70D698A).withValues(alpha:0.6)
-                                            : const Color(0xFF15C2BD).withValues(alpha:0.5),
-                                        blurRadius: 22,
-                                        spreadRadius: 3,
-                                      ),
-                                    ],
+                                            BoxShadow(
+                                              color: isDark
+                                                  ? const Color(
+                                                      0xE70D698A,
+                                                    ).withValues(alpha: 0.6)
+                                                  : const Color(
+                                                      0xFF15C2BD,
+                                                    ).withValues(alpha: 0.5),
+                                              blurRadius: 22,
+                                              spreadRadius: 3,
+                                            ),
+                                          ],
                                   ),
                                   child: Center(
                                     // Dynamic button state (Guess / Completed)
@@ -974,7 +951,6 @@ class _GuessGameState extends State<GuessGame>
                         // Rewarded hint button
                         GestureDetector(
                           onTap: () {
-
                             // Disable hints after round completion
                             if (_roundCompleted) {
                               Fluttertoast.showToast(
@@ -987,7 +963,8 @@ class _GuessGameState extends State<GuessGame>
                             // Maximum 3 hints per round
                             if (_hintCount >= 3) {
                               Fluttertoast.showToast(
-                                msg: "You can get hints up to 3 times per round.",
+                                msg:
+                                    "You can get hints up to 3 times per round.",
                               );
 
                               return;
@@ -1035,19 +1012,22 @@ class _GuessGameState extends State<GuessGame>
                                 boxShadow: _roundCompleted || _hintCount >= 3
                                     ? []
                                     : [
-                                  BoxShadow(
-                                    color: isDark
-                                        ? Colors.cyanAccent.withValues(alpha:0.45)
-                                        : Colors.teal.withValues(alpha:0.35),
-                                    blurRadius: 14,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
+                                        BoxShadow(
+                                          color: isDark
+                                              ? Colors.cyanAccent.withValues(
+                                                  alpha: 0.45,
+                                                )
+                                              : Colors.teal.withValues(
+                                                  alpha: 0.35,
+                                                ),
+                                          blurRadius: 14,
+                                          spreadRadius: 1,
+                                        ),
+                                      ],
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-
                                   Icon(
                                     _hintCount >= 3
                                         ? Icons.check_circle
@@ -1087,9 +1067,7 @@ class _GuessGameState extends State<GuessGame>
                               style: GoogleFonts.vt323(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: isDark
-                                    ? Colors.white
-                                    : Colors.black,
+                                color: isDark ? Colors.white : Colors.black,
                               ),
                             ),
                           ),
@@ -1098,7 +1076,6 @@ class _GuessGameState extends State<GuessGame>
                         // Restart current round
                         GestureDetector(
                           onTap: () async {
-
                             // Prevent restart before first guess
                             if (_attempts == 0) {
                               Fluttertoast.showToast(
@@ -1136,19 +1113,22 @@ class _GuessGameState extends State<GuessGame>
                                 boxShadow: _attempts == 0
                                     ? []
                                     : [
-                                  BoxShadow(
-                                    color: isDark
-                                        ? Colors.cyanAccent.withValues(alpha:0.5)
-                                        : Colors.teal.withValues(alpha:0.35),
-                                    blurRadius: 18,
-                                    spreadRadius: 2,
-                                  ),
-                                ],
+                                        BoxShadow(
+                                          color: isDark
+                                              ? Colors.cyanAccent.withValues(
+                                                  alpha: 0.5,
+                                                )
+                                              : Colors.teal.withValues(
+                                                  alpha: 0.35,
+                                                ),
+                                          blurRadius: 18,
+                                          spreadRadius: 2,
+                                        ),
+                                      ],
                               ),
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-
                                   Icon(
                                     Icons.refresh_rounded,
                                     color: isDark
@@ -1193,10 +1173,11 @@ class _GuessGameState extends State<GuessGame>
 
                             boxShadow: [
                               BoxShadow(
-                                color: (isDark
-                                    ? const Color(0xFFFFC107)
-                                    : const Color(0xFFFF8F00))
-                                    .withValues(alpha:0.18),
+                                color:
+                                    (isDark
+                                            ? const Color(0xFFFFC107)
+                                            : const Color(0xFFFF8F00))
+                                        .withValues(alpha: 0.18),
                                 blurRadius: 18,
                                 spreadRadius: 2,
                               ),
@@ -1223,7 +1204,7 @@ class _GuessGameState extends State<GuessGame>
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF0F172A).withValues(alpha:0.4)
+                            ? const Color(0xFF0F172A).withValues(alpha: 0.4)
                             : const Color(0xFFEAFDFC),
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
@@ -1242,7 +1223,7 @@ class _GuessGameState extends State<GuessGame>
                             style: GoogleFonts.exo2(
                               fontSize: 17,
                               fontWeight: FontWeight.bold,
-                              color: isDark ? Colors.white: Colors.black,
+                              color: isDark ? Colors.white : Colors.black,
                             ),
                           ),
                           Text(
@@ -1256,9 +1237,7 @@ class _GuessGameState extends State<GuessGame>
                           const SizedBox(height: 5),
 
                           Divider(
-                            color: isDark
-                                ? Colors.white24
-                                : Colors.black12,
+                            color: isDark ? Colors.white24 : Colors.black12,
                             thickness: 1,
                           ),
 
@@ -1267,124 +1246,127 @@ class _GuessGameState extends State<GuessGame>
                           // Show empty state when no rounds are played
                           scoreHistory.isEmpty
                               ? Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 20),
-                            child: Text(
-                              "No rounds played yet",
-                              style: GoogleFonts.exo2(
-                                color: isDark ? Colors.grey : Colors.black54,
-                              ),
-                            ),
-                          )
-                              : Column(
-                            children: [
-
-                              // Display recent round records
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-
-                                itemCount: _showAllHistory
-                                    ? scoreHistory.length
-                                    : (scoreHistory.length > 5
-                                    ? 5
-                                    : scoreHistory.length),
-
-                                itemBuilder: (context, index) {
-
-                                  int score = scoreHistory[index];
-
-                                  // Highlight best score entry
-                                  bool isHighest =
-                                      score == highestScore;
-
-                                  return Card(
-                                    color: isHighest
-                                        ? (isDark
-                                        ? const Color(0xFF436E67)
-                                        : const Color(0xFF9EE0D3)
-                                        )
-                                        : (isDark
-
-                                        ? const Color(0xFFC4EBF5)
-                                        .withValues(alpha:0.4)
-                                        : const Color(0xFFD2FCF6)
-                                        ),
-                                    child: ListTile(
-                                      leading: const Icon(
-                                        Icons.emoji_events,
-                                        color: Colors.amber,
-                                      ),
-                                      title: Text(
-                                        "Round ${scoreHistory.length - index}",
-                                        style: GoogleFonts.exo2(
-                                          fontWeight: isHighest
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-
-                                          color: isHighest
-                                              ? (isDark
-                                              ? Colors.white
-                                              : Colors.black87)
-                                              : (isDark
-                                              ? Colors.white
-                                              : Colors.black87),
-                                        ),
-                                      ),
-                                      trailing: Text(
-                                        "$score attempts",
-                                        style: GoogleFonts.electrolize(
-                                          fontWeight: isHighest
-                                              ? FontWeight.bold
-                                              : FontWeight.normal,
-
-                                          color: isHighest
-                                              ? (isDark
-                                              ? const Color(0xFFFFD54F)
-                                              : const Color(0xFF423014))
-                                              : (isDark
-                                              ? Colors.white
-                                              : Colors.black54),
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-
-                              // Expand / collapse history list
-                              if (scoreHistory.length > 5)
-                              // View more / less history
-                                TextButton.icon(
-                                  onPressed: () {
-                                    setState(() {
-                                      _showAllHistory =
-                                      !_showAllHistory;
-                                    });
-                                  },
-
-                                  icon: Icon(
-                                    _showAllHistory
-                                        ? Icons.expand_less
-                                        : Icons.expand_more,
-                                    color: isDark
-                                        ? const Color(0xFF4FC3F7)
-                                        : const Color(0xFF1976D2),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 20,
                                   ),
-
-                                  label: Text(
-                                    _showAllHistory
-                                        ? "View Less"
-                                        : "View More",
-                                    style: TextStyle(
+                                  child: Text(
+                                    "No rounds played yet",
+                                    style: GoogleFonts.exo2(
                                       color: isDark
-                                          ? const Color(0xFF4FC3F7)
-                                          : const Color(0xFF1976D2),
-                                      fontWeight: FontWeight.w600,
+                                          ? Colors.grey
+                                          : Colors.black54,
                                     ),
                                   ),
+                                )
+                              : Column(
+                                  children: [
+                                    // Display recent round records
+                                    ListView.builder(
+                                      shrinkWrap: true,
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+
+                                      itemCount: _showAllHistory
+                                          ? scoreHistory.length
+                                          : (scoreHistory.length > 5
+                                                ? 5
+                                                : scoreHistory.length),
+
+                                      itemBuilder: (context, index) {
+                                        int score = scoreHistory[index];
+
+                                        // Highlight best score entry
+                                        bool isHighest = score == highestScore;
+
+                                        return Card(
+                                          color: isHighest
+                                              ? (isDark
+                                                    ? const Color(0xFF436E67)
+                                                    : const Color(0xFF9EE0D3))
+                                              : (isDark
+                                                    ? const Color(
+                                                        0xFFC4EBF5,
+                                                      ).withValues(alpha: 0.4)
+                                                    : const Color(0xFFD2FCF6)),
+                                          child: ListTile(
+                                            leading: const Icon(
+                                              Icons.emoji_events,
+                                              color: Colors.amber,
+                                            ),
+                                            title: Text(
+                                              "Round ${scoreHistory.length - index}",
+                                              style: GoogleFonts.exo2(
+                                                fontWeight: isHighest
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+
+                                                color: isHighest
+                                                    ? (isDark
+                                                          ? Colors.white
+                                                          : Colors.black87)
+                                                    : (isDark
+                                                          ? Colors.white
+                                                          : Colors.black87),
+                                              ),
+                                            ),
+                                            trailing: Text(
+                                              "$score attempts",
+                                              style: GoogleFonts.electrolize(
+                                                fontWeight: isHighest
+                                                    ? FontWeight.bold
+                                                    : FontWeight.normal,
+
+                                                color: isHighest
+                                                    ? (isDark
+                                                          ? const Color(
+                                                              0xFFFFD54F,
+                                                            )
+                                                          : const Color(
+                                                              0xFF423014,
+                                                            ))
+                                                    : (isDark
+                                                          ? Colors.white
+                                                          : Colors.black54),
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+
+                                    // Expand / collapse history list
+                                    if (scoreHistory.length > 5)
+                                      // View more / less history
+                                      TextButton.icon(
+                                        onPressed: () {
+                                          setState(() {
+                                            _showAllHistory = !_showAllHistory;
+                                          });
+                                        },
+
+                                        icon: Icon(
+                                          _showAllHistory
+                                              ? Icons.expand_less
+                                              : Icons.expand_more,
+                                          color: isDark
+                                              ? const Color(0xFF4FC3F7)
+                                              : const Color(0xFF1976D2),
+                                        ),
+
+                                        label: Text(
+                                          _showAllHistory
+                                              ? "View Less"
+                                              : "View More",
+                                          style: TextStyle(
+                                            color: isDark
+                                                ? const Color(0xFF4FC3F7)
+                                                : const Color(0xFF1976D2),
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ),
+                                  ],
                                 ),
-                            ],
-                          ),
                         ],
                       ),
                     ),
@@ -1430,7 +1412,6 @@ class _GuessGameState extends State<GuessGame>
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-
                                 Icon(
                                   Icons.delete_outline,
                                   color: isDark
@@ -1458,7 +1439,6 @@ class _GuessGameState extends State<GuessGame>
                       ),
 
                     const SizedBox(height: 20),
-
                   ], // ✅ Column children closed
                 ),
               ),
@@ -1466,8 +1446,7 @@ class _GuessGameState extends State<GuessGame>
               // Celebration confetti animation
               ConfettiWidget(
                 confettiController: _confettiController,
-                blastDirectionality:
-                BlastDirectionality.explosive,
+                blastDirectionality: BlastDirectionality.explosive,
                 shouldLoop: false,
               ),
             ],
@@ -1477,7 +1456,7 @@ class _GuessGameState extends State<GuessGame>
     );
   }
 
-// Open settings menu
+  // Open settings menu
   Future<void> _openSettings() async {
     FocusManager.instance.primaryFocus?.unfocus();
     await showGlassSettingsMenu(
@@ -1490,8 +1469,7 @@ class _GuessGameState extends State<GuessGame>
           title: "Sound",
           value: _soundEnabled,
 
-          iconBuilder: (value) =>
-          value ? Icons.volume_up : Icons.volume_off,
+          iconBuilder: (value) => value ? Icons.volume_up : Icons.volume_off,
 
           onChanged: (value) async {
             setState(() {
@@ -1509,8 +1487,7 @@ class _GuessGameState extends State<GuessGame>
 
           affectsTheme: true,
 
-          iconBuilder: (value) =>
-          value ? Icons.dark_mode : Icons.light_mode,
+          iconBuilder: (value) => value ? Icons.dark_mode : Icons.light_mode,
 
           onChanged: (value) {
             widget.toggleTheme();
@@ -1550,7 +1527,7 @@ class _GuessGameState extends State<GuessGame>
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-/// Show app information dialog
+  /// Show app information dialog
   void _showAboutDialog() {
     showDialog(
       context: context,
@@ -1576,10 +1553,9 @@ class _GuessGameState extends State<GuessGame>
   void _openPrivacyPolicy() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (_) => const PrivacyPolicyPage(),
-      ),
+      MaterialPageRoute(builder: (_) => const PrivacyPolicyPage()),
     );
   }
+}
 
-}///End GuessGameState Class
+///End GuessGameState Class
