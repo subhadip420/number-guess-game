@@ -149,34 +149,6 @@ Future<void> showGlassSettingsMenu({
                                   ),
                                 ),
 
-                                /// SWITCH
-                                // Transform.scale(
-                                //   scale: 0.85,
-                                //   child: Switch(
-                                //     value: localValues[index],
-                                //     activeThumbColor: Colors.blueAccent,
-                                //     onChanged: (value) async {
-                                //       /// VALIDATION
-                                //       bool allowed =
-                                //           item.canChange?.call(value) ?? true;
-                                //
-                                //       if (!allowed) return;
-                                //       setStateMenu(() {
-                                //         /// UPDATE SWITCH
-                                //         localValues[index] = value;
-                                //
-                                //         /// UPDATE THEME
-                                //         if (item.affectsTheme) {
-                                //           localIsDark = value;
-                                //         }
-                                //       });
-                                //
-                                //       /// CALLBACK
-                                //       item.onChanged(value);
-                                //     },
-                                //   ),
-                                // ),
-
                                 item.isAction
                                     ? IconButton(
                                   icon: Icon(
