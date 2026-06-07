@@ -1612,6 +1612,7 @@ class _GuessGameState extends State<GuessGame>
 
 
   Future<void> _openSettings() async {
+    FocusManager.instance.primaryFocus?.unfocus();
     await showGlassSettingsMenu(
       context: context,
       isDark: widget.isDark,
@@ -1648,6 +1649,8 @@ class _GuessGameState extends State<GuessGame>
         ),
       ],
     );
+
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
 }///End GuessGameState Class
