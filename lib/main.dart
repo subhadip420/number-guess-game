@@ -6,7 +6,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 import 'package:number_guess_game/privacy_policy_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'splash_screen.dart';
+
 import 'glass_settings_menu.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,24 +20,6 @@ void main() async {
   runApp(const MyApp());
 }
 
-// class SplashStarter extends StatefulWidget {
-//   const SplashStarter({super.key});
-//
-//   @override
-//   State<SplashStarter> createState() => _SplashStarterState();
-// }
-
-// class _SplashStarterState extends State<SplashStarter> {
-//   bool isDark = true;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       home: SplashScreen(isDark: isDark),
-//     );
-//   }
-// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -113,10 +95,9 @@ class _GuessGameState extends State<GuessGame>
   late ConfettiController _confettiController;
   late int _targetNumber;
 
-  /////
   late AnimationController _shakeController;
   late Animation<double> _shakeAnimation;
-  ////
+
 
   String _message = "Guess a number between 1 and 100";
   int _attempts = 0;
@@ -158,7 +139,6 @@ class _GuessGameState extends State<GuessGame>
     _loadInterstitialAd();
     _loadRewardedAd();
 
-    /////
     _shakeController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
@@ -168,7 +148,6 @@ class _GuessGameState extends State<GuessGame>
       parent: _shakeController,
       curve: Curves.easeInOut,
     );
-    ////
 
   }
 
@@ -357,27 +336,6 @@ class _GuessGameState extends State<GuessGame>
     await prefs.setBool('soundEnabled', _soundEnabled);
   }
 
-  // Future<void> _clearScoreHistoryOnly() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //
-  //   await prefs.remove('scoreHistory');
-  //
-  //   setState(() {
-  //     scoreHistory.clear();
-  //   });
-  // }
-
-  // Future<void> _clearAllHistory() async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //
-  //   await prefs.remove('scoreHistory');
-  //   await prefs.remove('highestScore');
-  //
-  //   setState(() {
-  //     scoreHistory.clear();
-  //     highestScore = null;
-  //   });
-  // }
 
   Future<void> _clearAllHistory() async {
 
@@ -430,14 +388,6 @@ class _GuessGameState extends State<GuessGame>
                 thickness: 1,
               ),
 
-              // ListTile(
-              //   leading: const Icon(Icons.history),
-              //   title: const Text("Delete Score History Only."),
-              //   onTap: () {
-              //     Navigator.pop(context);
-              //     _clearScoreHistoryOnly();
-              //   },
-              // ),
 
               ListTile(
                 leading: const Icon(Icons.delete_forever, color: Colors.red),
@@ -445,10 +395,7 @@ class _GuessGameState extends State<GuessGame>
                   "Delete All Round History.",
                   style: TextStyle(color: Colors.red),
                 ),
-                // onTap: () {
-                //   Navigator.pop(context);
-                //   _clearAllHistory();
-                // },
+
                 onTap: () async {
 
                   Navigator.pop(context);
@@ -591,22 +538,6 @@ class _GuessGameState extends State<GuessGame>
     }
   }
 
-  // Future<void> _nextRound() async {
-  //
-  //   if (_soundEnabled) {
-  //     await AudioPlayer().play(
-  //       AssetSource('restart.mp3'),
-  //     );
-  //   }
-  //
-  //   setState(() {
-  //     _targetNumber = _random.nextInt(100) + 1;
-  //     _attempts = 0;
-  //     _message = "New Round! Guess again.";
-  //     _controller.clear();
-  //     _roundCompleted = false;
-  //   });
-  // }
 
   Future<void> _nextRound() async {
 
@@ -775,7 +706,7 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 30),
 
-                    /// 🎮 Main Card
+                    /// Main Card
                     Container(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
                       decoration: BoxDecoration(
@@ -984,41 +915,6 @@ class _GuessGameState extends State<GuessGame>
 
                     const SizedBox(height: 25),
 
-                    /// Attempts + Restart
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     Text(
-                    //       "Attempts: $_attempts",
-                    //       style: TextStyle(
-                    //         fontSize: 17,
-                    //         color: isDark
-                    //             ? Colors.white
-                    //             : Colors.black,
-                    //       ),
-                    //     ),
-                    //     TextButton.icon(
-                    //       onPressed: () async {
-                    //         if (_soundEnabled) {
-                    //           await AudioPlayer().play(
-                    //             AssetSource('restart.mp3'),
-                    //           );
-                    //         }
-                    //         _nextRound();
-                    //       },
-                    //       icon: const Icon(Icons.refresh, size: 22),
-                    //       label: const Text(
-                    //         "Restart",
-                    //         style: TextStyle(
-                    //           fontSize: 17,
-                    //           fontWeight: FontWeight.w600,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ],
-                    // ),
-
-
                     Row(
                       children: [
                         GestureDetector(
@@ -1220,35 +1116,6 @@ class _GuessGameState extends State<GuessGame>
                     const SizedBox(height: 15),
 
                     if (highestScore != null)
-                      // Center(
-                      //   child: Container(
-                      //     padding: const EdgeInsets.symmetric(
-                      //         horizontal: 20, vertical: 12),
-                      //     decoration: BoxDecoration(
-                      //       color: isDark
-                      //           ? Colors.transparent
-                      //           : const Color(0xFFFFF3E0),
-                      //       borderRadius: BorderRadius.circular(20),
-                      //       // border: Border.all(
-                      //       //   color: isDark
-                      //       //       ? const Color(0xFF088D89)
-                      //       //       : const Color(0xFFFF8F00),
-                      //       //   width: 2,
-                      //       // ),
-                      //     ),
-                      //     child: Text(
-                      //       "🏆 Highest Score: $highestScore attempts",
-                      //       style: GoogleFonts.electrolize(
-                      //         fontSize: 15,
-                      //         fontWeight: FontWeight.bold,
-                      //         color: isDark
-                      //             ? const Color(0xFFFFC107)
-                      //             : const Color(0xFFFF8F00),
-                      //       ),
-                      //     ),
-                      //   ),
-                      // ),
-
                       Center(
                         child: Container(
                           padding: const EdgeInsets.symmetric(
@@ -1333,55 +1200,6 @@ class _GuessGameState extends State<GuessGame>
 
                           const SizedBox(height: 5),
 
-                          // scoreHistory.isEmpty
-                          //     ? Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 20),
-                          //   child: Text(
-                          //     "No rounds played yet",
-                          //     style: TextStyle(
-                          //       color: isDark ? Colors.grey : Colors.black54,
-                          //     ),
-                          //   ),
-                          // )
-                          //     : ListView.builder(
-                          //   shrinkWrap: true,
-                          //   physics: const NeverScrollableScrollPhysics(),
-                          //   itemCount: scoreHistory.length,
-                          //   itemBuilder: (context, index) {
-                          //     int score = scoreHistory[index];
-                          //     bool isHighest = score == highestScore;
-                          //
-                          //     return Card(
-                          //       color: isHighest
-                          //           ? (isDark
-                          //           ? const Color(0xFFC4EBF5).withOpacity(0.4)
-                          //           : const Color(0xFF3ABDA6).withOpacity(0.6))
-                          //           : (isDark
-                          //           ? const Color(0xFF1B263B).withOpacity(0.2)
-                          //           : const Color(0xFFD2FCF6).withOpacity(0.6)),
-                          //       child: ListTile(
-                          //         leading: const Icon(Icons.emoji_events,
-                          //             color: Colors.amber),
-                          //         title: Text(
-                          //           "Round ${scoreHistory.length - index}",
-                          //           style: TextStyle(
-                          //             fontWeight: isHighest
-                          //                 ? FontWeight.bold
-                          //                 : FontWeight.normal,
-                          //           ),
-                          //         ),
-                          //         trailing: Text(
-                          //           "$score attempts",
-                          //           style: TextStyle(
-                          //             fontWeight: isHighest
-                          //                 ? FontWeight.bold
-                          //                 : FontWeight.normal,
-                          //           ),
-                          //         ),
-                          //       ),
-                          //     );
-                          //   },
-                          // ),
 
                           scoreHistory.isEmpty
                               ? Padding(
@@ -1520,23 +1338,6 @@ class _GuessGameState extends State<GuessGame>
                       ),
 
                     const SizedBox(height: 20),
-
-
-                    // if (scoreHistory.isNotEmpty)
-                    //   Center(
-                    //     child: TextButton.icon(
-                    //       onPressed: _showClearOptions,
-                    //       icon: const Icon(Icons.delete, color: Colors.red),
-                    //       label: const Text(
-                    //         "Clear History",
-                    //         style: TextStyle(
-                    //           fontSize: 16,
-                    //           fontWeight: FontWeight.w600,
-                    //           color: Colors.red,
-                    //         ),
-                    //       ),
-                    //     ),
-                    //   ),
 
                     if (scoreHistory.isNotEmpty)
                       Center(
@@ -1679,14 +1480,6 @@ class _GuessGameState extends State<GuessGame>
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
-  // void _showAboutDialog() {
-  //   showAboutDialog(
-  //     context: context,
-  //     applicationName: 'Number Guess Challenge',
-  //     applicationVersion: '1.0.0',
-  //     applicationLegalese: '© SP Tech Studios',
-  //   );
-  // }
 
   void _showAboutDialog() {
     showDialog(
