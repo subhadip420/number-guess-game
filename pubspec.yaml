@@ -1,7 +1,10 @@
 name: number_guess_game
-description: "Number Guess Challenge Game"
+description: "A fun number guessing game with hints, score tracking, achievements, and rewarding gameplay."
+
+# Prevent publishing to pub.dev
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
+# App version (version_name+version_code)
 version: 1.0.0+1
 
 environment:
@@ -11,20 +14,31 @@ dependencies:
   flutter:
     sdk: flutter
 
+  # Google AdMob ads
   google_mobile_ads: ^6.0.0
+
+  # Toast messages
   fluttertoast: ^8.2.12
+
+  # Custom fonts
   google_fonts: ^6.3.0
 
   cupertino_icons: ^1.0.8
+
+  # Local storage
   shared_preferences: ^2.2.2
+
+  # Celebration animation
   confetti: ^0.7.0
+
+  # Game sound effects
   audioplayers: ^5.2.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-
+  # App icon generator
   flutter_launcher_icons: ^0.13.1
 
   flutter_lints: ^6.0.0
@@ -32,6 +46,7 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+  # Audio assets
   assets:
     - assets/success.mp3
     - assets/high.mp3
@@ -39,7 +54,7 @@ flutter:
     - assets/restart.mp3
     - assets/error.mp3
 
-
+# Launcher icon configuration
 flutter_launcher_icons:
   android: true
   ios: false
