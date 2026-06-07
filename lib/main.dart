@@ -597,14 +597,14 @@ class _GuessGameState extends State<GuessGame>
             child: Container(
               decoration: BoxDecoration(
                 color: isDark
-                    ? Colors.white.withOpacity(0.05)
-                    : Colors.white.withOpacity(0.18),
+                    ? Colors.white.withValues(alpha:0.05)
+                    : Colors.white.withValues(alpha:0.18),
 
                 border: Border(
                   bottom: BorderSide(
                     color: isDark
-                        ? Colors.white.withOpacity(0.08)
-                        : Colors.black.withOpacity(0.08),
+                        ? Colors.white.withValues(alpha:0.08)
+                        : Colors.black.withValues(alpha:0.08),
                   ),
                 ),
               ),
@@ -636,7 +636,7 @@ class _GuessGameState extends State<GuessGame>
 
                   splashColor: isDark
                       ? Colors.white24
-                      : const Color(0xE70D698A).withOpacity(0.2),
+                      : const Color(0xE70D698A).withValues(alpha:0.2),
 
                   highlightColor: Colors.transparent,
 
@@ -711,13 +711,13 @@ class _GuessGameState extends State<GuessGame>
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 18),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF16213E).withOpacity(0.9)
+                            ? const Color(0xFF16213E).withValues(alpha:0.9)
                             : const Color(0xFFDFFAF1),
                         borderRadius: BorderRadius.circular(25),
 
                         border: Border.all(
                           color: isDark
-                              ? const Color(0xFF0E4286).withOpacity(0.9)
+                              ? const Color(0xFF0E4286).withValues(alpha:0.9)
                               : const Color(0xFF70C0AE),
                           width: 4,
                         ),
@@ -725,8 +725,8 @@ class _GuessGameState extends State<GuessGame>
                         boxShadow: [
                           BoxShadow(
                             color: isDark
-                                ? Colors.blueAccent.withOpacity(0.6)
-                                : Colors.black.withOpacity(0.1),
+                                ? Colors.blueAccent.withValues(alpha:0.6)
+                                : Colors.black.withValues(alpha:0.1),
                             blurRadius: 25,
                             spreadRadius: 2,
                           )
@@ -868,8 +868,8 @@ class _GuessGameState extends State<GuessGame>
                                         : [
                                       BoxShadow(
                                         color: isDark
-                                            ? const Color(0xE70D698A).withOpacity(0.6)
-                                            : const Color(0xFF15C2BD).withOpacity(0.5),
+                                            ? const Color(0xE70D698A).withValues(alpha:0.6)
+                                            : const Color(0xFF15C2BD).withValues(alpha:0.5),
                                         blurRadius: 22,
                                         spreadRadius: 3,
                                       ),
@@ -975,8 +975,8 @@ class _GuessGameState extends State<GuessGame>
                                     : [
                                   BoxShadow(
                                     color: isDark
-                                        ? Colors.cyanAccent.withOpacity(0.45)
-                                        : Colors.teal.withOpacity(0.35),
+                                        ? Colors.cyanAccent.withValues(alpha:0.45)
+                                        : Colors.teal.withValues(alpha:0.35),
                                     blurRadius: 14,
                                     spreadRadius: 1,
                                   ),
@@ -1074,8 +1074,8 @@ class _GuessGameState extends State<GuessGame>
                                     : [
                                   BoxShadow(
                                     color: isDark
-                                        ? Colors.cyanAccent.withOpacity(0.5)
-                                        : Colors.teal.withOpacity(0.35),
+                                        ? Colors.cyanAccent.withValues(alpha:0.5)
+                                        : Colors.teal.withValues(alpha:0.35),
                                     blurRadius: 18,
                                     spreadRadius: 2,
                                   ),
@@ -1131,7 +1131,7 @@ class _GuessGameState extends State<GuessGame>
                                 color: (isDark
                                     ? const Color(0xFFFFC107)
                                     : const Color(0xFFFF8F00))
-                                    .withOpacity(0.18),
+                                    .withValues(alpha:0.18),
                                 blurRadius: 18,
                                 spreadRadius: 2,
                               ),
@@ -1160,7 +1160,7 @@ class _GuessGameState extends State<GuessGame>
                       padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: isDark
-                            ? const Color(0xFF0F172A).withOpacity(0.4)
+                            ? const Color(0xFF0F172A).withValues(alpha:0.4)
                             : const Color(0xFFEAFDFC),
                         borderRadius: BorderRadius.circular(15),
                         border: Border.all(
@@ -1239,7 +1239,7 @@ class _GuessGameState extends State<GuessGame>
                                         : (isDark
 
                                         ? const Color(0xFFC4EBF5)
-                                        .withOpacity(0.4)
+                                        .withValues(alpha:0.4)
                                         : const Color(0xFFD2FCF6)
                                         ),
                                     child: ListTile(
