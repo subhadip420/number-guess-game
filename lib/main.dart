@@ -1094,7 +1094,7 @@ class _GuessGameState extends State<GuessGame>
                                   Icon(
                                     _hintCount >= 3
                                         ? Icons.check_circle
-                                        : Icons.lightbulb_outline,
+                                        : Icons.tips_and_updates_rounded,
                                     color: isDark
                                         ? Colors.cyanAccent
                                         : Colors.teal,
@@ -1163,7 +1163,7 @@ class _GuessGameState extends State<GuessGame>
                               decoration: BoxDecoration(
                                 color: isDark
                                     ? const Color(0xFF032B48)
-                                    : const Color(0xFFE3F2FD),
+                                    : const Color(0xFFF7FFFE),
 
                                 borderRadius: BorderRadius.circular(16),
 
