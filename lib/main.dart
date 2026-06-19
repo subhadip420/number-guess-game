@@ -142,7 +142,7 @@ class _GuessGameState extends State<GuessGame>
   RewardedAd? _rewardedAd;
 
   // Gameplay stats
-  int _completedRounds = 0;
+
   int _roundCounter = 0;
   int _hintCount = 0;
 
@@ -531,7 +531,6 @@ class _GuessGameState extends State<GuessGame>
     // Correct guess
     else {
       // Track completed rounds
-      _completedRounds++;
       _roundCounter++;
 
       setState(() {
