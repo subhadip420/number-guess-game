@@ -143,6 +143,7 @@ class _GuessGameState extends State<GuessGame>
 
   // Gameplay stats
   int _completedRounds = 0;
+  int _roundCounter = 0;
   int _hintCount = 0;
 
   @override
@@ -531,6 +532,7 @@ class _GuessGameState extends State<GuessGame>
     else {
       // Track completed rounds
       _completedRounds++;
+      _roundCounter++;
 
       setState(() {
         _message = "Congrats! You guessed it in $_attempts attempt(s). 🎉";
@@ -569,8 +571,16 @@ class _GuessGameState extends State<GuessGame>
       await AudioPlayer().play(AssetSource('restart.mp3'));
     }
 
+    if (!_roundCompleted) {
+      _roundCounter++;
+    }
+
     // Show interstitial ad after every 3 completed rounds
-    if (_completedRounds > 0 && _completedRounds % 3 == 0) {
+    // if (_completedRounds > 0 && _completedRounds % 3 == 0) {
+    //   _showInterstitialAd();
+    // }
+
+    if (_roundCounter > 0 && _roundCounter % 4 == 0) {
       _showInterstitialAd();
     }
 
