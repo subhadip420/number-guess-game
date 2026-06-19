@@ -197,7 +197,8 @@ class _GuessGameState extends State<GuessGame>
   void _loadBannerAds() {
     // Top Banner Ad
     _topBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
+      //adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test BannerAd
+      adUnitId: 'ca-app-pub-5454466291921987/3550650192',  //Real BannerAd id
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
@@ -211,7 +212,8 @@ class _GuessGameState extends State<GuessGame>
 
     // Bottom Banner Ad
     _bottomBannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Native Ad
+      //adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test Banner Ad
+      adUnitId: 'ca-app-pub-5454466291921987/3550650192',  //Real BannerAd id
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
@@ -227,7 +229,8 @@ class _GuessGameState extends State<GuessGame>
   /// Load native ad for score history section
   void _loadNativeAd() {
     _nativeAd = NativeAd(
-      adUnitId: 'ca-app-pub-3940256099942544/2247696110', // Test Native Ad
+      //adUnitId: 'ca-app-pub-3940256099942544/2247696110', // Test Native Ad
+      adUnitId: 'ca-app-pub-5454466291921987/8643194771', // Real Native Ad
 
       listener: NativeAdListener(
         onAdLoaded: (ad) {
@@ -254,7 +257,8 @@ class _GuessGameState extends State<GuessGame>
   /// Load full-screen interstitial ad
   void _loadInterstitialAd() {
     InterstitialAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/1033173712',
+      //adUnitId: 'ca-app-pub-3940256099942544/1033173712', //Test Interstitial Ad Id
+      adUnitId: 'ca-app-pub-5454466291921987/1147848130', //Real Interstitial Ad Id
       request: const AdRequest(),
       adLoadCallback: InterstitialAdLoadCallback(
         onAdLoaded: (ad) {
@@ -295,7 +299,8 @@ class _GuessGameState extends State<GuessGame>
   /// Load rewarded ad for hints
   void _loadRewardedAd() {
     RewardedAd.load(
-      adUnitId: 'ca-app-pub-3940256099942544/5224354917',
+      //adUnitId: 'ca-app-pub-3940256099942544/5224354917', //Test Rewarded Ad Id
+      adUnitId: 'ca-app-pub-5454466291921987/2209648363', //Real Rewarded Ad Id
       request: const AdRequest(),
       rewardedAdLoadCallback: RewardedAdLoadCallback(
         onAdLoaded: (ad) {
