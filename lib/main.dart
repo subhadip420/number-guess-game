@@ -1005,7 +1005,7 @@ class _GuessGameState extends State<GuessGame>
                             child: Container(
                               width: 82,
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 12,
+                                horizontal: 8,
                                 vertical: 6,
                               ),
                               decoration: BoxDecoration(
