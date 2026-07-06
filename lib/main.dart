@@ -198,7 +198,8 @@ class _GuessGameState extends State<GuessGame>
     // Top Banner Ad
     _topBannerAd = BannerAd(
       //adUnitId: 'ca-app-pub-3940256099942544/6300978111', // Test BannerAd
-      adUnitId: 'ca-app-pub-5454466291921987/3550650192',  //Real BannerAd id
+      //adUnitId: 'ca-app-pub-5454466291921987/3550650192',  //Real BannerAd id
+      adUnitId: 'ca-app-pub-5454466291921987/5131436549', //new top banner ad id
       request: const AdRequest(),
       size: AdSize.banner,
       listener: BannerAdListener(
